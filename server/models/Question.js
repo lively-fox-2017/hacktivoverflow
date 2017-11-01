@@ -42,7 +42,9 @@ QuestionSchema.pre('save', function (next) {
     .find({ slug: { $regex: '.*' + questionSlug + '.*' } })
     .then((questions) => {
       if (questions.length) {
-        this.slug += '-' + questions.length.toString();
+        this.slug =  questionSlug + '-' + questions.length.toString();
+      } else {
+        this.slug = questionSlug;
       }
       next();
     })

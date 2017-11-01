@@ -91,13 +91,78 @@ class QuestionController {
 
   static create (req, res) {
 
+    Question
+      .create({
+        title: req.body.title,
+        content: req.body.content,
+        author: req.body.author,
+        voter: []
+      })
+      .then((question) => {
+        res.status(201).json(question);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+
   }
 
   static update (req, res) {
 
+    Question
+      .findOne({ slug: req.params.slug })
+      .then((question) => {
+        if (!question) {
+          res.status(404).json({});
+        } else {
+
+          Question
+              .updateOne(
+                { slug: req.params.slug },
+                {
+                  title: req.body.title,
+                  content: req.body.content
+                },
+                { runValidators: true }
+              )
+              .then((response) => {
+                res.status(200).json(question);
+              })
+              .catch((err) => {
+                res.status(400).json(err);
+              });
+
+        }
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+
   }
 
   static delete (req, res) {
+
+    Question
+      .findOne({ slug: req.params.slug })
+      .then((question) => {
+        if (!question) {
+          res.status(404).json({});
+        } else {
+
+          Question
+            .deleteOne({ slug: req.params.slug })
+            .then((response) => {
+              res.status(200).json(question);
+            })
+            .catch((err) => {
+              res.status(400).json(err);
+            });
+
+        }
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
 
   }
 
