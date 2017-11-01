@@ -1,0 +1,15 @@
+{
+  "name": "hacktivoverflow-server",
+  "version": "1.0.0",
+  "description": "HacktivOverflow Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deathmitri/hacktivoverflow/"
+  },
+  "author": "Dimitri Wahyudiputra",
+  "license": "ISC"
+}
