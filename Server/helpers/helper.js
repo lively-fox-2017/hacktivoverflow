@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const jwtDecode = require('jwt-decode')
 const crypto = require('crypto')
 
 module.exports = {
@@ -7,6 +8,19 @@ module.exports = {
       username: reqBody.username,
       password: password,
       secret: secret
+    }
+
+    return obj
+  },
+
+  dataQuestion: (reqBody, userId) => {
+    let obj = {
+      user: userId,
+      title: reqBody.title,
+      question: reqBody.question,
+      voters: [],
+      createdAt: new Date(),
+      updatedAt: null
     }
 
     return obj
@@ -36,13 +50,13 @@ module.exports = {
     }, process.env.token_secret);
 
     return token
+  },
+
+  tokenDecode: (input) => {
+    let decode = jwtDecode(input)
+
+    decode = decode._id
+
+    return decode
   }
-  //
-  // authorization: (input) => {
-  //   let decode = jwtDecode(input)
-  //
-  //   decode = decode._id
-  //
-  //   return decode
-  // }
 }
