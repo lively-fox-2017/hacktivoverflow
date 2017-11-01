@@ -29,14 +29,14 @@ const QuestionSchema = new Schema({
     required: [true, 'Author is required']
   },
   voter: [{
-    type: Schema.types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User'
   }]
 });
 
 QuestionSchema.pre('save', function (next) {
 
-  const questionSlug = slug(this.title);
+  const questionSlug = slug(this.title, { lower: true });
 
   mongoose.model('Question', QuestionSchema)
     .find({ slug: { $regex: '.*' + questionSlug + '.*' } })
