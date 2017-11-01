@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-mongoose.connection.openUri(process.env.MONGO_URI);
+mongoose.connection.openUri(process.env.MONGO_URL);
 
 const Schema = mongoose.Schema;
 
@@ -16,11 +16,13 @@ const AnswerSchema = new Schema({
   },
   by: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: [true, 'Answer author is required']
   },
   question: {
     type: Schema.Types.ObjectId,
-    ref: 'Question'
+    ref: 'Question',
+    required: [true, 'Question ID is required']
   },
   voter: [{
     type: Schema.Types.ObjectId,
