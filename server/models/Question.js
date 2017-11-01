@@ -15,7 +15,10 @@ const QuestionSchema = new Schema({
     type: String,
     required: [true, 'Content is required']
   },
-  slug: String,
+  slug: {
+    type: String,
+    unique: true
+  },
   created_at: {
     type: Date,
     default: Date.now
