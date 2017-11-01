@@ -21,6 +21,17 @@ const questionQuery = [
       votes: -1,
       created_at: -1
     }
+  },
+  {
+    $lookup: {
+      from: "users",
+      localField: "author",
+      foreignField: "_id",
+      as: "author"
+    }
+  },
+  {
+    $unwind: '$author'
   }
 ];
 
@@ -72,15 +83,13 @@ class QuestionController {
         if (err) {
           res.status(400).json(err);
         } else {
-          res.status(200).json(questions);
+          res.status(200).json(questions[0]);
         }
       });
 
   }
 
   static create (req, res) {
-
-
 
   }
 
@@ -94,9 +103,83 @@ class QuestionController {
 
   static vote (req, res) {
 
+    Question
+      .findOne({ slug: req.body.slug })
+      .then((question) => {
+
+        if (!question) {
+          res.status(404).json({});
+        } else {
+
+          if (question.voter.indexOf(req.body.user_id) === -1) {
+
+            Question
+              .updateOne(
+                { slug: req.body.slug },
+                { $push: { voter: req.body.user_id } }
+              )
+              .then((response) => {
+                res.status(200).json(question);
+              })
+              .catch((err) => {
+                res.status(400).json(err);
+              });
+
+          } else {
+
+            res.status(400).json({
+              error: 'User voted on this question'
+            });
+
+          }
+
+        }
+
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+
   }
 
   static unvote (req, res) {
+
+    Question
+      .findOne({ slug: req.body.slug })
+      .then((question) => {
+
+        if (!question) {
+          res.status(404).json({});
+        } else {
+
+          if (question.voter.indexOf(req.body.user_id) !== -1) {
+
+            Question
+              .updateOne(
+                { slug: req.body.slug },
+                { $pull: { voter: req.body.user_id } }
+              )
+              .then((response) => {
+                res.status(200).json(question);
+              })
+              .catch((err) => {
+                res.status(400).json(err);
+              });
+
+          } else {
+
+            res.status(400).json({
+              error: 'This user haven\'t vote on this question'
+            });
+
+          }
+
+        }
+
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
 
   }
 

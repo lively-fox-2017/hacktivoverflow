@@ -14,7 +14,7 @@ server.use(bodyParser.json());
 
 server.use('/', apiRoutes);
 
-server.use(() => {
+server.use((req, res) => {
   res.status(404).json({
     error: 'Route not found'
   });
