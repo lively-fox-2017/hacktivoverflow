@@ -3,13 +3,24 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import swal from 'sweetalert2'
+import store from './vuex/store'
+import axios from 'axios'
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.css'
 
 Vue.config.productionTip = false
+Vue.prototype.$http = axios.create({
+  baseURL: 'http://localhost:3000'
+})
+Vue.use(VueMaterial)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  swal,
+  store,
   template: '<App/>',
   components: { App }
 })
