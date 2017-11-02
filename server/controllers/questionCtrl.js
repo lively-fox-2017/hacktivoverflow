@@ -18,7 +18,6 @@ class QuestionCtrl {
     Question.upVote(req.params.id, req.body.user).then((data) => {
       res.status(200).send(data)
     }).catch((err) => {
-      console.log(err)
       res.status(500).send(err)
     })
   }

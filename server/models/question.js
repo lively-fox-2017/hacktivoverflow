@@ -102,6 +102,8 @@ class Model {
           created_at: 1,
           tags: 1,
           posted_by: 1,
+          upvote: 1,
+          downvote: 1,
           upvotes: {
             $size: "$upvote"
           },
@@ -121,15 +123,20 @@ class Model {
           "_id": new ObjectId(id)
         }
       }]).then((data) => {
-        if (data.length)
-          resolve({
-            message: 'Data Found',
-            data: data[0]
+        if (data.length) {
+          Question.populate(data, {
+            path: "posted_by upvote.user downvote.user"
+          }, function(err, populated) {
+            resolve({
+              message: 'Data Found',
+              data: populated[0]
+            })
           })
-        else
+        } else {
           reject({
             message: 'Data Not Found'
           })
+        }
       }).catch((err) => {
         reject(err)
       })
