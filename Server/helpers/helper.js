@@ -26,6 +26,19 @@ module.exports = {
     return obj
   },
 
+  dataAnswer: (reqBody, userId, questionId) => {
+    let obj = {
+      user: userId,
+      questionId: questionId,
+      answer: reqBody.answer,
+      voters: [],
+      createdAt: new Date(),
+      updatedAt: null
+    }
+
+    return obj
+  },
+
   secretGen: () => {
     let str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
 
