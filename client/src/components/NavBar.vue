@@ -6,7 +6,7 @@
     </md-button>
     <h2 class="md-title" style="flex: 1" @click="goToHome">Hacktiv Overflow</h2>
     <md-button v-on:click="openSearchDialog">Search</md-button>
-    <md-button v-if="loggedIn">Dashboard</md-button>
+    <md-button v-if="loggedIn" @click="goToDashboard">Dashboard</md-button>
     <md-button v-on:click="doLogout" v-if="loggedIn">LogOut</md-button>
     <md-button v-on:click="openLoginDialog" id="fab" v-else>Login</md-button>
   </md-toolbar>
@@ -44,6 +44,9 @@ export default {
     },
     goToHome () {
       this.$router.push('/')
+    },
+    goToDashboard () {
+      this.$router.push('/dashboard')
     }
   },
   computed: {

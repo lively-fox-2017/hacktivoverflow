@@ -3,11 +3,7 @@
   <NavBar @openLoginDialog="openLoginDialog" @openSearchDialog="openSearchDialog"/>
   <LoginDialog ref="Login"/>
   <SearchDialog ref="Search" @doSearch="doSearch"/>
-  <md-layout md-align="center" md-row md-sm-column style="padding: 8px;">
-    <md-layout md-flex="75" md-align="center">
-      <router-view :search="search"/>
-    </md-layout>
-  </md-layout>
+  <router-view :search="search"/>
 </div>
 </template>
 

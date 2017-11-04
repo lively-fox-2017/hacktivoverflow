@@ -25,6 +25,7 @@ export default {
   methods: {
     doSearch () {
       this.$emit('doSearch', this.search)
+      this.$router.push('/')
     },
     openDialog (ref) {
       this.$refs[ref].open()
