@@ -1,7 +1,11 @@
 const mutations = {
-  // increment (state, payload) {
-  //   state.count = payload
-  // }
+  toggleLog (state) {
+    if (localStorage.getItem('token')) {
+      state.loggedIn = true
+    } else {
+      state.loggedIn = false
+    }
+  }
 }
 
 export default mutations

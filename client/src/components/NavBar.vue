@@ -1,102 +1,53 @@
 <template lang="html">
 <div>
-  <md-menu md-size="4" md-direction="top right" ref="menu">
-    <md-button class="md-icon-button" md-menu-trigger>
-      <md-icon>contacts</md-icon>
+  <md-toolbar>
+    <md-button class="md-icon-button" @click="toggleLeftSidenav">
+      <md-icon>menu</md-icon>
     </md-button>
-
-    <md-menu-content>
-      <div class="author-card">
-        <md-avatar class="md-large">
-          <img src="assets/marcosmoura.jpg" alt="Marcos Moura">
-        </md-avatar>
-
-        <div class="author-card-info">
-          <span>Marcos Moura</span>
-          <div class="author-card-links">
-            <a href="https://linkedin.com/in/marcosvmmoura" target="_blank" rel="noopener">Linkedin</a>
-            <a href="https://github.com/marcosmoura" target="_blank" rel="noopener">GitHub</a>
-          </div>
-        </div>
+    <h2 class="md-title" style="flex: 1">Hacktiv Overflow</h2>
+    <md-button>Search</md-button>
+    <md-button v-if="loggedIn">Dashboard</md-button>
+    <md-button v-on:click="doLogout" v-if="loggedIn">LogOut</md-button>
+    <md-button v-on:click="openLoginDialog" id="fab" v-else>Login</md-button>
+  </md-toolbar>
+  <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
+    <md-toolbar>
+      <div class="md-toolbar-container">
+        <h3 class="md-title">Hacktiv Overflow</h3>
       </div>
-    </md-menu-content>
-  </md-menu>
-
-  <md-menu md-size="4">
-    <md-button class="md-icon-button" md-menu-trigger>
-      <md-icon>phone</md-icon>
-    </md-button>
-
-    <md-menu-content>
-      <md-menu-item>
-        <md-icon>phone</md-icon>
-        <span>My Item 1</span>
-      </md-menu-item>
-
-      <md-menu-item>
-        <md-icon>phone</md-icon>
-        <span>My Item 2</span>
-      </md-menu-item>
-
-      <md-menu-item>
-        <md-icon>phone</md-icon>
-        <span>My Item 3</span>
-      </md-menu-item>
-    </md-menu-content>
-  </md-menu>
-
-  <md-menu md-direction="bottom left" md-size="4">
-    <md-button class="md-icon-button" md-menu-trigger>
-      <md-icon>near_me</md-icon>
-    </md-button>
-
-    <md-menu-content>
-      <md-menu-item>
-        <span>Find on map</span>
-        <md-icon>near_me</md-icon>
-      </md-menu-item>
-
-      <md-menu-item>
-        <span>Call</span>
-        <md-icon>phone</md-icon>
-      </md-menu-item>
-    </md-menu-content>
-  </md-menu>
-
-  <md-button class="md-raised md-primary" @click="$refs.menu.open">Open contact card</md-button>
+    </md-toolbar>
+  </md-sidenav>
 </div>
 </template>
 
 <script>
-export default {}
-</script>
-
-<style lang="css">
-.author-card {
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-
-  .md-avatar {
-    margin-right: 16px;
-  }
-
-  .author-card-info {
-    display: flex;
-    flex-flow: column;
-    flex: 1;
-  }
-
-  span {
-    font-size: 16px;
-  }
-
-  .author-card-links {
-    display: flex;
-
-    a + a {
-      margin-left: 8px;
+export default {
+  methods: {
+    toggleLeftSidenav () {
+      this.$refs.leftSidenav.toggle()
+    },
+    open (ref) {
+      console.log('Opened: ' + ref)
+    },
+    close (ref) {
+      console.log('Closed: ' + ref)
+    },
+    openLoginDialog () {
+      this.$emit('openLoginDialog')
+    },
+    doLogout () {
+      localStorage.removeItem('token')
+      this.$store.commit('toggleLog')
+    }
+  },
+  computed: {
+    loggedIn () {
+      return this.$store.state.loggedIn
     }
   }
 }
+</script>
+
+<style lang="css">
+
 </style>

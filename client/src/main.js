@@ -11,9 +11,17 @@ import 'vue-material/dist/vue-material.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios.create({
-  baseURL: 'http://localhost:3000'
+  baseURL: 'http://localhost:3000/api'
 })
+
 Vue.use(VueMaterial)
+
+Vue.material.registerTheme('default', {
+  primary: 'purple',
+  accent: 'lime',
+  warn: 'red',
+  background: 'white'
+})
 
 /* eslint-disable no-new */
 new Vue({

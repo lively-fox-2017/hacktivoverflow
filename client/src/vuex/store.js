@@ -6,7 +6,8 @@ import actions from './actions'
 Vue.use(Vuex)
 
 const initialState = {
-  articles: []
+  articles: [],
+  loggedIn: false
 }
 
 export default new Vuex.Store({
