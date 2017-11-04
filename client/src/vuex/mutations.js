@@ -5,6 +5,9 @@ const mutations = {
     } else {
       state.loggedIn = false
     }
+  },
+  setQuestions (state, payload) {
+    state.questions = payload
   }
 }
 

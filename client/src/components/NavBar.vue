@@ -5,7 +5,7 @@
       <md-icon>menu</md-icon>
     </md-button>
     <h2 class="md-title" style="flex: 1">Hacktiv Overflow</h2>
-    <md-button>Search</md-button>
+    <md-button v-on:click="openSearchDialog">Search</md-button>
     <md-button v-if="loggedIn">Dashboard</md-button>
     <md-button v-on:click="doLogout" v-if="loggedIn">LogOut</md-button>
     <md-button v-on:click="openLoginDialog" id="fab" v-else>Login</md-button>
@@ -34,6 +34,9 @@ export default {
     },
     openLoginDialog () {
       this.$emit('openLoginDialog')
+    },
+    openSearchDialog () {
+      this.$emit('openSearchDialog')
     },
     doLogout () {
       localStorage.removeItem('token')
