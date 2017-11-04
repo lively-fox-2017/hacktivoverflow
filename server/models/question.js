@@ -153,9 +153,13 @@ class Model {
         upvote: [],
         downvote: []
       }).then((data) => {
-        resolve({
-          message: 'Create Success',
-          data
+        Question.populate(data, {
+          path: "posted_by upvote.user downvote.user"
+        }, function(err, populated) {
+          resolve({
+            message: 'Data Found',
+            data: populated
+          })
         })
       }).catch((err) => {
         reject(err)
@@ -169,9 +173,13 @@ class Model {
       }, update, {
         new: true
       }).then((data) => {
-        resolve({
-          message: 'Update Success',
-          data
+        Question.populate(data, {
+          path: "posted_by upvote.user downvote.user"
+        }, function(err, populated) {
+          resolve({
+            message: 'Data Found',
+            data: populated
+          })
         })
       }).catch((err) => {
         reject(err)

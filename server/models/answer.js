@@ -54,9 +54,13 @@ class Model {
         downvote: [],
         question_id: insert.question_id
       }).then((data) => {
-        resolve({
-          message: 'Create Success',
-          data
+        Answer.populate(data, {
+          path: "posted_by upvote.user downvote.user"
+        }, function(err, populated) {
+          resolve({
+            message: 'Data Found',
+            data: populated
+          })
         })
       }).catch((err) => {
         reject(err)
@@ -70,9 +74,13 @@ class Model {
       }, update, {
         new: true
       }).then((data) => {
-        resolve({
-          message: 'Update Success',
-          data
+        Answer.populate(data, {
+          path: "posted_by upvote.user downvote.user"
+        }, function(err, populated) {
+          resolve({
+            message: 'Data Found',
+            data: populated
+          })
         })
       }).catch((err) => {
         reject(err)
