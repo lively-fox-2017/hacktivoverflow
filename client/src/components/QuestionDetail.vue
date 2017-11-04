@@ -1,4 +1,5 @@
 <template lang="html">
+<div>
   <md-card>
     <md-card-header>
       <md-card-header-text>
@@ -12,12 +13,12 @@
         </md-button>
 
         <md-menu-content>
-          <md-menu-item>
+          <md-menu-item v-on:click="upVoteQuestion(questions_id)">
             <span>UpVote : {{question.upvotes}}</span>
             <md-icon>vertical_align_top</md-icon>
           </md-menu-item>
 
-          <md-menu-item>
+          <md-menu-item v-on:click="downVoteQuestion(questions_id)">
             <span>DownVote : {{question.downvotes}}</span>
             <md-icon>vertical_align_bottom</md-icon>
           </md-menu-item>
@@ -44,12 +45,12 @@
             </md-button>
 
             <md-menu-content>
-              <md-menu-item>
+              <md-menu-item v-on:click="upVoteAnswer(answer._id)">
                 <span>UpVote : {{answer.upvotes}}</span>
                 <md-icon>vertical_align_top</md-icon>
               </md-menu-item>
 
-              <md-menu-item>
+              <md-menu-item v-on:click="downVoteAnswer(answer._id)">
                 <span>DownVote : {{answer.downvotes}}</span>
                 <md-icon>vertical_align_bottom</md-icon>
               </md-menu-item>
@@ -74,17 +75,23 @@
         <md-divider />
       </md-card>
       <p style="color:white">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non, voluptas eius illo quas</p>
-      <form>
+      <form v-on:submit.prevent="postNewAnswer">
         <md-input-container>
           <label>Textarea</label>
-          <md-textarea></md-textarea>
+          <md-textarea v-model="textAnswer" required></md-textarea>
         </md-input-container>
         <md-card-actions>
-          <md-button class="md-raised md-accent">Answer This</md-button>
+          <md-button class="md-raised md-accent" type="submit">Answer This</md-button>
         </md-card-actions>
       </form>
     </md-card-content>
   </md-card>
+  <md-dialog-alert
+  :md-content="alert.content"
+  :md-ok-text="alert.ok"
+  ref="commentNotif">
+  </md-dialog-alert>
+</div>
 </template>
 
 <script>
@@ -92,11 +99,19 @@ export default {
   props: ['question_id'],
   data: () => {
     return {
-      question: {},
-      answers: []
+      question: [],
+      answers: [],
+      textAnswer: '',
+      alert: {
+        content: 'a',
+        ok: 'a'
+      }
     }
   },
   methods: {
+    openDialog (ref) {
+      this.$refs[ref].open()
+    },
     getQuestionsData () {
       this.$http.get('/questions/' + this.question_id).then(({data}) => {
         this.question = data.data
@@ -111,6 +126,105 @@ export default {
         console.error(err)
       })
     },
+    upVoteQuestion (id) {
+      this.$http.put('/questions/upvote/' + this.question_id, {
+        user: localStorage.getItem('token')
+      }).then(({data}) => {
+        this.question.votes++
+        this.question.upvotes++
+        this.alert.content = 'You upvote to this question'
+        this.alert.ok = 'Cool!'
+        this.openDialog('commentNotif')
+      }).catch(err => {
+        this.alert.content = 'There\' some error \n or you probably has upvote this'
+        this.alert.ok = 'Sad:('
+        this.openDialog('commentNotif')
+        console.error(err)
+      })
+    },
+    downVoteQuestion (id) {
+      this.$http.put('/questions/downvote/' + this.question_id, {
+        user: localStorage.getItem('token')
+      }).then(({data}) => {
+        this.question.votes--
+        this.question.downvotes++
+        this.alert.content = 'You downvote to this question'
+        this.alert.ok = 'Cool!'
+        this.openDialog('commentNotif')
+      }).catch(err => {
+        this.alert.content = 'There\' some error \n or you probably has upvote this'
+        this.alert.ok = 'Sad:('
+        this.openDialog('commentNotif')
+        console.error(err)
+      })
+    },
+    upVoteAnswer (id) {
+      this.$http.put('/answers/upvote/' + id, {
+        user: localStorage.getItem('token')
+      }).then(({data}) => {
+        var index = this.answers.findIndex((element) => {
+          if (element._id === id) {
+            return element
+          }
+        })
+        this.answers[index].upvotes++
+        this.answers[index].votes++
+        this.alert.content = 'You upvote to this answer'
+        this.alert.ok = 'Cool!'
+        this.openDialog('commentNotif')
+      }).catch(err => {
+        this.alert.content = 'There\' some error \n or you probably has upvote this'
+        this.alert.ok = 'Sad:('
+        this.openDialog('commentNotif')
+        console.log('hubaaaa')
+        console.error(err)
+      })
+    },
+    downVoteAnswer (id) {
+      this.$http.put('/answers/downvote/' + id, {
+        user: localStorage.getItem('token')
+      }).then(({data}) => {
+        var index = this.answers.findIndex((element) => {
+          if (element._id === id) {
+            return element
+          }
+        })
+        this.answers[index].downvotes++
+        this.answers[index].votes--
+        this.alert.content = 'You downvote to this answer'
+        this.alert.ok = 'Cool!'
+        this.openDialog('commentNotif')
+      }).catch(err => {
+        this.alert.content = 'There\' some error \n or you probably has upvote this'
+        this.alert.ok = 'Sad:('
+        this.openDialog('commentNotif')
+        console.error(err)
+      })
+    },
+    postNewAnswer () {
+      if (this.$store.state.loggedIn) {
+        var body = {
+          answer: this.textAnswer,
+          question_id: this.question_id,
+          posted_by: localStorage.getItem('token')
+        }
+        this.$http.post('/answers', body).then(({data}) => {
+          this.answers.unshift(data.data)
+          this.textAnswer = ''
+          this.alert.content = 'Your comment has successfully posted'
+          this.alert.ok = 'Cool!'
+          this.openDialog('commentNotif')
+        }).catch(err => {
+          this.alert.content = 'There\' some error'
+          this.alert.ok = 'Sad:('
+          this.openDialog('commentNotif')
+          console.log(err)
+          console.error(err)
+        })
+      } else {
+        alert('login dulu')
+      }
+    },
     calculateDate (tanggal) {
       var dateSekarang = Date(Date.now())
       var datePost = new Date(tanggal)
@@ -120,7 +234,7 @@ export default {
       if (hours > 23) {
         hours = Math.floor(hours / 24) + ' day '
       } else {
-        hours += ' min '
+        hours += ' hour '
       }
       return hours
     }

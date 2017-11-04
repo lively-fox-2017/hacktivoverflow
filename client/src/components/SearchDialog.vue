@@ -5,7 +5,7 @@
       <md-dialog-content>
         <md-input-container>
           <label>Search / Tags</label>
-          <md-input type="text" v-model="search" required></md-input>
+          <md-input type="text" v-model="search"></md-input>
         </md-input-container>
       </md-dialog-content>
       <md-dialog-actions>
@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     doSearch () {
-      console.log('aaa')
+      this.$emit('doSearch', this.search)
     },
     openDialog (ref) {
       this.$refs[ref].open()

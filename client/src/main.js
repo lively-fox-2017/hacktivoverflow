@@ -11,7 +11,10 @@ import 'vue-material/dist/vue-material.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios.create({
-  baseURL: 'http://localhost:3000/api'
+  baseURL: 'http://localhost:3000/api',
+  headers: {
+    'token': localStorage.getItem('token')
+  }
 })
 
 Vue.use(VueMaterial)

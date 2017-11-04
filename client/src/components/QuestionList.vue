@@ -6,7 +6,7 @@
     </md-card-media>
 
     <md-card-content>
-      <md-card md-with-hover v-for="question in questions">
+      <md-card md-with-hover v-for="question in computeQuestion">
         <md-card-header style="background:lightblue">
           <div class="md-title">{{question.title}}</div>
           <div class="md-subhead"><span>Posted By: {{question.posted_by.username}}</span><span style="float:right">asked {{ calculateDate(question.created_at) }} ago</span></div>
@@ -34,6 +34,7 @@
 
 <script>
 export default {
+  props: ['search'],
   methods: {
     calculateDate (tanggal) {
       var dateSekarang = Date(Date.now())
@@ -44,7 +45,7 @@ export default {
       if (hours > 23) {
         hours = Math.floor(hours / 24) + ' day '
       } else {
-        hours += ' min '
+        hours += ' hour '
       }
       return hours
     }
@@ -52,6 +53,19 @@ export default {
   computed: {
     questions () {
       return this.$store.state.questions
+    },
+    computeQuestion () {
+      if (this.search) {
+        var showedData = []
+        this.questions.forEach(question => {
+          if (question.content.toLowerCase().indexOf(this.search.toLowerCase()) > -1 || question.tags.indexOf('#' + this.search.toLowerCase()) > -1) {
+            showedData.push(question)
+          }
+        })
+        return showedData
+      } else {
+        return this.questions
+      }
     }
   }
 }
