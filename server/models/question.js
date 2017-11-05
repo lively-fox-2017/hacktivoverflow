@@ -44,6 +44,9 @@ questionSchema.plugin(idvalidator)
 var Question = mongoose.model('Question', questionSchema)
 
 class Model {
+  static model() {
+    return Question
+  }
   static read() {
     return new Promise((resolve, reject) => {
       Question.aggregate([{

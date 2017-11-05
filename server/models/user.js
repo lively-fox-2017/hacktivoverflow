@@ -32,6 +32,9 @@ userSchema.plugin(idvalidator)
 var User = mongoose.model('User', userSchema)
 
 class Model {
+  static model() {
+    return User
+  }
   static read() {
     return new Promise((resolve, reject) => {
       User.find({}).then((data) => {

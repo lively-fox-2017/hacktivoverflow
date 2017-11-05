@@ -5,6 +5,8 @@ var jwt = require('jsonwebtoken')
 var Schema = mongoose.Schema
 var ObjectId = mongoose.Types.ObjectId;
 var connectionUrl = 'mongodb://localhost/hacktivoverflow_dev'
+var Question = require('./question')
+var User = require('./user')
 mongoose.connect(connectionUrl, {
   useMongoClient: true
 })
@@ -58,7 +60,7 @@ class Model {
           path: "posted_by upvote.user downvote.user"
         }, function(err, populated) {
           resolve({
-            message: 'Data Found',
+            message: 'Insert Success',
             data: populated
           })
         })
@@ -76,10 +78,15 @@ class Model {
       }).then((data) => {
         Answer.populate(data, {
           path: "posted_by upvote.user downvote.user"
-        }, function(err, populated) {
-          resolve({
-            message: 'Data Found',
-            data: populated
+        }, function(err, oldPopulated) {
+          var model = User.model()
+          model.populate(oldPopulated, {
+            path: "question_id.posted_by"
+          }, function(err, newPopulated) {
+            resolve({
+              message: 'Update Success',
+              data: newPopulated
+            })
           })
         })
       }).catch((err) => {
@@ -130,7 +137,7 @@ class Model {
         $match: {
           "posted_by": new ObjectId(user_id)
         }
-      },{
+      }, {
         $sort: {
           votes: -1,
           created_at: -1,
@@ -139,10 +146,15 @@ class Model {
         if (data.length) {
           Answer.populate(data, {
             path: "posted_by upvote.user downvote.user question_id"
-          }, function(err, populated) {
-            resolve({
-              message: 'Data Found',
-              data: populated
+          }, function(err, oldPopulated) {
+            var model = User.model()
+            model.populate(oldPopulated, {
+              path: "question_id.posted_by"
+            }, function(err, newPopulated) {
+              resolve({
+                message: 'Data Found',
+                data: newPopulated
+              })
             })
           })
         } else {
@@ -183,7 +195,7 @@ class Model {
         $match: {
           "question_id": new ObjectId(question_id)
         }
-      },{
+      }, {
         $sort: {
           votes: -1,
           created_at: -1,
