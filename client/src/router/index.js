@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Questions from '@/components/Questions'
+import PostQuestion from '@/components/PostQuestion'
 import QuestionContent from '@/components/QuestionContent'
 
 Vue.use(Router)
@@ -17,6 +18,10 @@ export default new Router({
     {
       path: '/questions',
       component: Questions
+    },
+    {
+      path: '/post-question',
+      component: PostQuestion
     },
     {
       path: '/questions/:slug',

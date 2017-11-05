@@ -50,6 +50,9 @@ class AnswerController {
       ]
     };
 
+    // Remove all $match, just in case if there's any
+    answerQuery.splice(4);
+
     Answer
       .aggregate(answerQuery, function (err, answers) {
         if (err) {
@@ -74,6 +77,9 @@ class AnswerController {
         false
       ]
     };
+
+    // Remove all $match, just in case if there's any
+    answerQuery.splice(4);
 
     answerQuery.push({ $match: { _id: new mongoose.mongo.ObjectId(req.params.id) } });
 
@@ -101,6 +107,9 @@ class AnswerController {
         false
       ]
     };
+
+    // Remove all $match, just in case if there's any
+    answerQuery.splice(4);
 
     answerQuery.push({ $match: { question: new mongoose.mongo.ObjectId(req.params.question_id) } });
 

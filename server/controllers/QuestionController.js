@@ -51,6 +51,9 @@ class QuestionController {
       ]
     };
 
+    // Remove all $match, just in case if there's any
+    questionQuery.splice(4);
+
     Question
       .aggregate(questionQuery, function (err, questions) {
         if (err) {
@@ -75,6 +78,9 @@ class QuestionController {
         false
       ]
     };
+
+    // Remove all $match, just in case if there's any
+    questionQuery.splice(4);
 
     questionQuery.push({ $match: { slug: req.params.slug } });
 

@@ -18,6 +18,9 @@
           <li>
             <router-link to="/questions">Questions</router-link>
           </li>
+          <li>
+            <router-link to="/post-question">Post a Question</router-link>
+          </li>
         </ul>
         <div class="navbar-form navbar-right">
           <router-link to="/login" class="btn btn-primary">Login</router-link>
