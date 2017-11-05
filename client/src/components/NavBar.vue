@@ -41,6 +41,7 @@ export default {
     doLogout () {
       localStorage.removeItem('token')
       this.$store.commit('toggleLog')
+      this.$router.push('/')
     },
     goToHome () {
       this.$router.push('/')

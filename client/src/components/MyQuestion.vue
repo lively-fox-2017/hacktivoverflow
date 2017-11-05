@@ -139,7 +139,7 @@ export default {
       if (this.search) {
         var showedData = []
         this.questions.forEach(question => {
-          if (question.content.toLowerCase().indexOf(this.search.toLowerCase()) > -1 || question.tags.indexOf('#' + this.search.toLowerCase()) > -1) {
+          if (question.content.toLowerCase().indexOf(this.search.toLowerCase()) > -1 || question.tags.indexOf('#' + this.search.toLowerCase()) > -1 || question.title.toLowerCase().indexOf(this.search.toLowerCase()) > -1) {
             showedData.push(question)
           }
         })

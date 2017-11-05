@@ -121,7 +121,7 @@ export default {
       if (this.search) {
         var showedData = []
         this.answers.forEach(answer => {
-          if (answer.answer.toLowerCase().indexOf(this.search.toLowerCase()) > -1 || answer.question.content.indexOf(this.search.toLowerCase()) > -1 || answer.question.tags.indexOf('#' + this.search.toLowerCase()) > -1) {
+          if (answer.answer.toLowerCase().indexOf(this.search.toLowerCase()) > -1 || answer.question_id.title.toLowerCase().indexOf(this.search.toLowerCase()) > -1 || answer.question_id.content.toLowerCase().indexOf(this.search.toLowerCase()) > -1 || answer.question_id.tags.indexOf('#' + this.search.toLowerCase()) > -1) {
             showedData.push(answer)
           }
         })
