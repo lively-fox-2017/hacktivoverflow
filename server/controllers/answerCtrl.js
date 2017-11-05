@@ -7,6 +7,13 @@ class AnswerCtrl {
       res.status(500).send(err)
     })
   }
+  static readByUser (req, res, next) {
+    Answer.readByUser(req.params.user_id).then((data) => {
+      res.status(200).send(data)
+    }).catch((err) => {
+      res.status(500).send(err)
+    })
+  }
   static upVote (req, res, next) {
     Answer.upVote(req.params.id, req.body.user).then((data) => {
       res.status(200).send(data)

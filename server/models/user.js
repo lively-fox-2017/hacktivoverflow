@@ -3,6 +3,7 @@ var idvalidator = require('mongoose-id-validator')
 var encrypt = require('../helpers/cryptoHelper')
 var mongoose = require('mongoose')
 var jwt = require('jsonwebtoken')
+var jwtDecoder = require('../helpers/jwtDecodeHelper')
 var Schema = mongoose.Schema
 var connectionUrl = 'mongodb://localhost/hacktivoverflow_dev'
 mongoose.connect(connectionUrl, {
@@ -49,6 +50,7 @@ class Model {
     })
   }
   static readOne(id) {
+    id = jwtDecoder(id)
     return new Promise((resolve, reject) => {
       User.findOne({
         "_id": id
@@ -85,6 +87,7 @@ class Model {
     })
   }
   static update(update) {
+    update._id = jwtDecoder(update._id)
     return new Promise((resolve, reject) => {
       if (update.password) {
         update.password = encrypt(update.password)

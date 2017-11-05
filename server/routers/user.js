@@ -7,5 +7,6 @@ router.get('/:id', UserCtrl.readOne)
 router.post('/', UserCtrl.create)
 router.put('/:id', UserCtrl.update)
 router.delete('/:id', UserCtrl.delete)
+router.get('/aylien/:text', UserCtrl.aylien) 
 
 module.exports = router;

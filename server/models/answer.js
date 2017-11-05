@@ -101,6 +101,60 @@ class Model {
       })
     })
   }
+  static readByUser(user_id) {
+    user_id = jwtDecoder(user_id)
+    return new Promise((resolve, reject) => {
+      Answer.aggregate([{
+        $project: {
+          answer: 1,
+          created_at: 1,
+          posted_by: 1,
+          question_id: 1,
+          upvote: 1,
+          downvote: 1,
+          upvotes: {
+            $size: "$upvote"
+          },
+          downvotes: {
+            $size: "$downvote"
+          },
+          votes: {
+            $subtract: [{
+              $size: "$upvote"
+            }, {
+              $size: "$downvote"
+            }]
+          },
+        }
+      }, {
+        $match: {
+          "posted_by": new ObjectId(user_id)
+        }
+      },{
+        $sort: {
+          votes: -1,
+          created_at: -1,
+        }
+      }]).then((data) => {
+        if (data.length) {
+          Answer.populate(data, {
+            path: "posted_by upvote.user downvote.user question_id"
+          }, function(err, populated) {
+            resolve({
+              message: 'Data Found',
+              data: populated
+            })
+          })
+        } else {
+          reject({
+            message: 'Data Not Found'
+          })
+        }
+      }).catch((err) => {
+        reject(err)
+      })
+    })
+  }
   static readOneByQuestionId(question_id) {
     return new Promise((resolve, reject) => {
       Answer.aggregate([{

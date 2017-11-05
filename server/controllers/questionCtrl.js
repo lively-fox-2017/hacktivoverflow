@@ -7,6 +7,14 @@ class QuestionCtrl {
       res.status(500).send(err)
     })
   }
+  static readByUser (req, res, next) {
+    Question.readByUser(req.params.user_id).then((data) => {
+      res.status(200).send(data)
+    }).catch((err) => {
+      console.log(err)
+      res.status(500).send(err)
+    })
+  }
   static readOne (req, res, next) {
     Question.readOne(req.params.id).then((data) => {
       res.status(200).send(data)
