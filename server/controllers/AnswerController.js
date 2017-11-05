@@ -102,7 +102,7 @@ class AnswerController {
       ]
     };
 
-    answerQuery.push({ $match: { _id: new mongoose.mongo.ObjectId(req.params.question_id) } });
+    answerQuery.push({ $match: { question: new mongoose.mongo.ObjectId(req.params.question_id) } });
 
     Answer
       .aggregate(answerQuery, function (err, answers) {
