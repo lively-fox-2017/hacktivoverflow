@@ -26,7 +26,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 |Routes                                             |HTTP        |Description                                                                     |
 |---------------------------------------------------|:----------:|-------------------------------------------------------------------------------:|
 |<div style="color:cyan">/questions</div>           |** GET **   |Show All questions                                                              |
-|<div style="color:cyan">/questions/:userid</div>   |** GET **   |Show all question based on userID (Added fiture and not complete)               |
+|<div style="color:cyan">/questions/:userid</div>   |** GET **   |Show all question based on userID (Added feature and not complete)              |
 |<div style="color:cyan">/questions/insert</div>    |** POST **  |Insert data question into Collection (authenticate user only)                   |
 |<div style="color:cyan">/questions/vote/:id</div>  |** PUT **   |Push user ID to question document based on question id (authenticate user only) |
 |<div style="color:cyan">/questions/update/:id</div>|** PUT **   |Update data question based on ID (limited to that user question only)           |
