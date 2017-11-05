@@ -14,7 +14,8 @@ const store = new Vuex.Store({
   state: {
     questions: [],
     answers: [],
-    isLogin: false
+    isLogin: false,
+    userId: ''
   },
   mutations: {
     setQuestions (state, value) {
@@ -25,6 +26,9 @@ const store = new Vuex.Store({
     },
     setLogin (state, value) {
       state.isLogin = value
+    },
+    setUserId (state, value) {
+      state.userId = value
     }
   },
   actions: {
@@ -32,11 +36,15 @@ const store = new Vuex.Store({
       db.get('/questions').then(({data}) => {
         // console.log(data)
         commit('setQuestions', data.data)
+      }).catch((reason) => {
+        console.log(reason)
       })
     },
     allAnswer ({commit}, id) {
       db.get(`/answers/${id}`).then(({data}) => {
         commit('setAnswers', data.data)
+      }).catch((reason) => {
+        console.log(reason)
       })
     },
     login ({commit}, credentials) {
@@ -74,7 +82,7 @@ const store = new Vuex.Store({
       }).catch((reason) => {
         Vue.swal(
           'Oops...',
-          'Cannot match requirement',
+          'Username already taken',
           'error'
         )
       })

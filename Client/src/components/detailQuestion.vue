@@ -1,12 +1,12 @@
 <template lang="html">
   <div>
     <div class="col-md-8 col-sm-12 col-md-offset-2">
-      <div class="votes col-md-1 text-center bg-success">
+      <div class="votes col-md-1 text-center bg-success" @click="voteQuestion">
         <h2>{{ question.votersCount }}</h2>
         <h4>Votes</h4>
       </div>
       <div class="col-md-11 question">
-        <h2 class="list-group-item-heading title">{{ question.title }} <span class='updatedDate' v-if="question.updatedAt">Edited at {{ value.createdAt | moment('D MMMM YYYY, h:mm A') }}</span></h2><hr>
+        <h2 class="list-group-item-heading title">{{ question.title }} <span class='updatedDate' v-if="question.updatedAt">Edited at {{ question.updatedAt | moment('D MMMM YYYY, h:mm A') }}</span></h2><hr>
         <p class="list-group-item-text">{{ question.question}}</p>
         <h5 class='text-right'>asked by <span class="user">{{ question.user.username }}</span></h5>
       </div>
@@ -30,6 +30,43 @@ export default {
   computed: {
     Questions () {
       return this.$store.state.questions
+    },
+    isLogin () {
+      return this.$store.state.isLogin
+    }
+  },
+  methods: {
+    voteQuestion () {
+      if (this.isLogin === false) {
+        this.$swal(
+          'Sorry...',
+          'You should login before vote',
+          'error'
+        )
+      } else {
+        let tkn = localStorage.getItem('token')
+        // console.log(tkn)
+        this.$axios.put(`/questions/vote/${this.id}`, '', {
+          headers: {
+            'token': tkn
+          }
+        }).then((serverResponse) => {
+          // console.log(serverResponse)
+          this.$store.dispatch('allQuestions')
+          this.$swal(
+            'Vote Success',
+            `Nice vote`,
+            'success'
+          )
+        }).catch((reason) => {
+          // console.log(reason)
+          this.$swal(
+            'Oops...',
+            'You cant vote yourself',
+            'error'
+          )
+        })
+      }
     }
   },
   watch: {

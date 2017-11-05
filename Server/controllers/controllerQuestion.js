@@ -63,6 +63,8 @@ module.exports = {
 
   insert: (req, res) => {
     let userId = helper.tokenDecode(req.headers.token)
+    // let userId = helper.tokenDecode(req.body.token)
+	   // console.log(req.headers.token)
     Question.create(helper.dataQuestion(req.body, userId)).then((createdQuestion) => {
       res.status(200).json({
         message: "Berhasil Tambah Question",
@@ -75,6 +77,7 @@ module.exports = {
 
   vote: (req, res) => {
     let userId = helper.tokenDecode(req.headers.token)
+    // let userId = helper.tokenDecode(req.body.token)
     // console.log(userId);
     Question.findOne({_id: req.params.id}).then((question) => {
       // console.log(question.voters.indexOf(userId));
@@ -115,6 +118,7 @@ module.exports = {
 
   update: (req, res) => {
     let userId = helper.tokenDecode(req.headers.token)
+    // let userId = helper.tokenDecode(req.body.token)
 
     Question.findOne({_id: req.params.id}).then((question) => {
 
@@ -148,6 +152,7 @@ module.exports = {
 
   delete: (req, res) => {
     let userId = helper.tokenDecode(req.headers.token)
+    // let userId = helper.tokenDecode(req.body.token)
 
     Question.findOne({_id: req.params.id}).then((question) => {
 

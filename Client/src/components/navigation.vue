@@ -14,7 +14,7 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
         <ul class="nav navbar-nav">
           <li class="active"><router-link to="/">Home</router-link></li>
-          <li><a href="#">My Questions</a></li>
+          <li v-if="isLogin == true"><a href="#">My Questions</a></li>
           <!-- login -->
           <li class="dropdown" v-if="isLogin == false">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Login <span class="caret"></span></a>

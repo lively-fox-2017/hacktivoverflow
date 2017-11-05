@@ -24,6 +24,9 @@ export default {
     checkLogin () {
       if (localStorage.getItem('token')) {
         this.$store.commit('setLogin', true)
+
+        let decodedToken = this.$jwt.decode()
+        this.$store.commit('setUserId', decodedToken._id)
       } else {
         this.$store.commit('setLogin', false)
       }
