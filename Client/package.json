@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.17.0",
     "vue": "^2.5.2",
+    "vue-moment": "^2.1.0",
     "vue-router": "^3.0.1",
     "vue-sweetalert2": "^1.0.7",
     "vuejs-jwt": "^1.0.0",

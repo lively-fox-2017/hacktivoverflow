@@ -7,6 +7,7 @@ import store from './vuex/store'
 import axios from 'axios'
 import swal from 'vue-sweetalert2'
 import VueJWT from 'vuejs-jwt'
+import vueMoment from 'vue-moment'
 
 Vue.prototype.$axios = axios.create({
   baseURL: 'http://localhost:3000'
@@ -17,6 +18,8 @@ Vue.use(VueJWT, {
   signKey: 'hacktiv8',
   keyName: 'token'
 })
+
+Vue.use(vueMoment)
 
 Vue.config.productionTip = false
 

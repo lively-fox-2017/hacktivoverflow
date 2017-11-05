@@ -1,23 +1,30 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <navigation/>
     <router-view/>
   </div>
 </template>
 
 <script>
+import navigation from '@/components/navigation'
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    navigation
+  },
+  methods: {
+    getAllQuestions () {
+      this.$store.dispatch('allQuestions')
+    }
+  },
+  created () {
+    this.getAllQuestions()
+  }
 }
 </script>
 
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
