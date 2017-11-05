@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.17.0",
+    "aylien_textapi": "^0.6.0",
     "sweetalert2": "^6.11.4",
     "vue": "^2.5.2",
     "vue-material": "^0.8.1",

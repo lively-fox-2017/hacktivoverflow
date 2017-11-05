@@ -1,8 +1,8 @@
 <template lang="html">
   <md-card md-with-hover>
     <md-card-header>
-      <div class="md-title">Title goes here</div>
-      <div class="md-subhead">Subtitle here</div>
+      <div class="md-title">My Answer</div>
+      <div class="md-subhead">{{user.username}}</div>
     </md-card-header>
 
     <md-card-content>
@@ -28,6 +28,7 @@
 
 <script>
 export default {
+  props: ['user']
 }
 </script>
 
