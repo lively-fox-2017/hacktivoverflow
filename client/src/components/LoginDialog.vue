@@ -15,6 +15,7 @@
       </md-dialog-content>
       <md-dialog-actions>
         <md-button class="md-primary" @click="openDialog('Register')">SignUp</md-button>
+        <md-button class="md-primary" @click="">Login with Facebok</md-button>
         <md-button class="md-primary" type="submit">Login</md-button>
       </md-dialog-actions>
     </form>

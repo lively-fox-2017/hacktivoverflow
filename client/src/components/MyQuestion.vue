@@ -8,11 +8,15 @@
 
     <md-card-content>
       <md-button class="md-raised md-primary" id="custom" @click="openQuestionDialog">Add New</md-button>
+      <md-input-container>
+        <label>Search</label>
+        <md-input type="text" v-model="search"></md-input>
+      </md-input-container>
       <md-divider/>
       <md-divider/>
       <md-divider/>
       <md-divider/>
-      <md-card md-with-hover v-for="question in questions">
+      <md-card md-with-hover v-for="question in computeQuestion">
         <md-card-header>
           <div class="md-title">{{question.title}}</div>
           <div class="md-subhead"><span>Posted By: {{question.posted_by.username}}</span><span style="float:right">asked at {{question.created_at}}</span></div>
@@ -55,6 +59,7 @@ export default {
   props: ['user'],
   data () {
     return {
+      search: '',
       questions: [],
       isEdit: false,
       question: {
@@ -128,6 +133,21 @@ export default {
   },
   created () {
     this.getQuestions()
+  },
+  computed: {
+    computeQuestion () {
+      if (this.search) {
+        var showedData = []
+        this.questions.forEach(question => {
+          if (question.content.toLowerCase().indexOf(this.search.toLowerCase()) > -1 || question.tags.indexOf('#' + this.search.toLowerCase()) > -1) {
+            showedData.push(question)
+          }
+        })
+        return showedData
+      } else {
+        return this.questions
+      }
+    }
   }
 }
 </script>
