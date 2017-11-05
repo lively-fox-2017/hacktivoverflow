@@ -12,13 +12,26 @@ export default {
   components: {
     navigation
   },
+  computed: {
+    isLogin () {
+      return this.$store.state.isLogin
+    }
+  },
   methods: {
     getAllQuestions () {
       this.$store.dispatch('allQuestions')
+    },
+    checkLogin () {
+      if (localStorage.getItem('token')) {
+        this.$store.commit('setLogin', true)
+      } else {
+        this.$store.commit('setLogin', false)
+      }
     }
   },
   created () {
     this.getAllQuestions()
+    this.checkLogin()
   }
 }
 </script>

@@ -8,7 +8,7 @@
       <div class="col-md-11 answer">
         <h2 class="list-group-item-heading title"><span class='answerDate'>Answered at {{ value.createdAt | moment('D MMMM YYYY, h:mm A') }}</span></h2><hr>
         <p class="list-group-item-text">{{ value.answer}}</p>
-        <h5 class='asker'>answered by <span class="user">{{ value.user.username }}</span></h5>
+        <h5 class='text-right'>answered by <span class="user">{{ value.user.username }}</span></h5>
       </div>
     </div>
   </div>
@@ -36,6 +36,7 @@ export default {
 <style scoped>
   .votes{
     cursor: pointer;
+    color: white;
     padding: 0px;
   }
 
@@ -49,6 +50,7 @@ export default {
 
   .answerMain{
     margin-top: 20px;
+    padding: 0px;
   }
 
   .answer{
@@ -60,10 +62,6 @@ export default {
   .answerDate{
     float: right;
     font-size: 12px;
-  }
-
-  .asker{
-    float: right;
   }
 
   .user{

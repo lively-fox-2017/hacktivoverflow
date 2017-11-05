@@ -8,7 +8,7 @@
       <div class="col-md-11 question">
         <h2 class="list-group-item-heading title">{{ question.title }} <span class='updatedDate' v-if="question.updatedAt">Edited at {{ value.createdAt | moment('D MMMM YYYY, h:mm A') }}</span></h2><hr>
         <p class="list-group-item-text">{{ question.question}}</p>
-        <h5 class='asker'>asked by <span class="user">{{ question.user.username }}</span></h5>
+        <h5 class='text-right'>asked by <span class="user">{{ question.user.username }}</span></h5>
       </div>
     </div>
     <answer :questionId="id" />
@@ -57,6 +57,7 @@ export default {
 <style scoped>
   .votes{
     cursor: pointer;
+    color: white;
     padding: 0px;
   }
 
@@ -76,10 +77,6 @@ export default {
   .updatedDate{
     float: right;
     font-size: 12px;
-  }
-
-  .asker{
-    float: right;
   }
 
   .user{
