@@ -14,14 +14,17 @@
           By: {{ (question.author._id === $store.state.user_id) ? 'You' : question.author.name }}
         </p>
         <template v-if="isLoggedIn">
-          <button @click="voteQuestion(question.slug)" v-if="!question.voted" class="btn btn-primary">
+          <button @click="voteQuestion(question.slug)" v-if="!question.voted" class="btn btn-default">
             <span class="glyphicon glyphicon-thumbs-up"></span>
           </button>
-          <button @click="unvoteQuestion(question.slug)" v-else class="btn btn-danger">
+          <button @click="unvoteQuestion(question.slug)" v-else class="btn btn-default">
             <span class="glyphicon glyphicon-thumbs-down"></span>
           </button>
           <button class="btn btn-default">
             <span class="glyphicon glyphicon-pencil"></span>
+          </button>
+          <button class="btn btn-danger">
+            <span class="glyphicon glyphicon-trash"></span>
           </button>
         </template>
         <hr>
