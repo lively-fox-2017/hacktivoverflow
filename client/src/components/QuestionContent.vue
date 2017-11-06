@@ -76,7 +76,7 @@
       postAnswer () {
         const newAnswer = {
           content: this.your_answer,
-          by: this.question.author._id,
+          by: this.$store.state.user_id,
           question_id: this.question._id
         }
         this.$http.post(`/answers`, newAnswer)

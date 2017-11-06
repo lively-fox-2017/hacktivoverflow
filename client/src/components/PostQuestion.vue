@@ -27,7 +27,7 @@
       return {
         title: '',
         content: '',
-        author: '59f9beeb7a285a1e26cae680'
+        author: this.$store.state.user_id
       }
     },
     methods: {
