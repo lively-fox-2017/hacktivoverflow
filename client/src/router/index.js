@@ -6,6 +6,7 @@ import Login from '@/components/Login'
 import Questions from '@/components/Questions'
 import PostQuestion from '@/components/PostQuestion'
 import EditQuestion from '@/components/EditQuestion'
+import EditAnswer from '@/components/EditAnswer'
 import QuestionContent from '@/components/QuestionContent'
 
 Vue.use(Router)
@@ -64,6 +65,18 @@ export default new Router({
       },
       name: 'EditQuestion',
       component: EditQuestion,
+      props: true
+    },
+    {
+      path: '/edit-answer/:id',
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('access_token'))
+          next()
+        else
+          next('/')
+      },
+      name: 'EditAnswer',
+      component: EditAnswer,
       props: true
     },
     {

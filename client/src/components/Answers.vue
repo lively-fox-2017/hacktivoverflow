@@ -23,9 +23,9 @@
               <span class="glyphicon glyphicon-thumbs-down"></span>
             </button>
             <template v-if="answer.by._id === $store.state.user_id">
-              <button class="btn btn-default">
+              <router-link :to="{ name: 'EditAnswer', params: { id: answer._id } }" class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span>
-              </button>
+              </router-link>
               <button @click="confirmDeleteAnswer(answer._id)" class="btn btn-danger">
                 <span class="glyphicon glyphicon-trash"></span>
               </button>
