@@ -4,7 +4,7 @@ var mongoose = require('mongoose')
 var jwt = require('jsonwebtoken')
 var Schema = mongoose.Schema
 var ObjectId = mongoose.Types.ObjectId;
-var connectionUrl = 'mongodb://localhost/hacktivoverflow_dev'
+var connectionUrl = 'mongodb://'+process.env.DB_USER+':'+process.env.DB_PASS+'@cluster0-shard-00-00-jlkah.mongodb.net:27017,cluster0-shard-00-01-jlkah.mongodb.net:27017,cluster0-shard-00-02-jlkah.mongodb.net:27017/hacktivoverflow_prod?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin'
 mongoose.connect(connectionUrl, {
   useMongoClient: true
 })
