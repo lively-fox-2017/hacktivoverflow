@@ -127,79 +127,119 @@ export default {
       })
     },
     upVoteQuestion (id) {
-      this.$http.put('/questions/upvote/' + this.question_id, {
-        user: localStorage.getItem('token')
-      }).then(({data}) => {
-        this.question.votes++
-        this.question.upvotes++
-        this.alert.content = 'You upvote to this question'
-        this.alert.ok = 'Cool!'
-        this.openDialog('commentNotif')
-      }).catch(err => {
-        this.alert.content = 'There\' some error \n or you probably has upvote this'
-        this.alert.ok = 'Sad:('
-        this.openDialog('commentNotif')
-        console.error(err)
-      })
+      if (this.$store.state.loggedIn) {
+        this.$http.put('/questions/upvote/' + this.question_id, {
+          user: localStorage.getItem('token')
+        }).then(({data}) => {
+          this.question.votes++
+          this.question.upvotes++
+          if (data.message.indexOf('Old') > -1) {
+            this.question.downvotes--
+          }
+          this.alert.content = 'You upvote to this question'
+          this.alert.ok = 'Cool!'
+          this.openDialog('commentNotif')
+        }).catch(err => {
+          this.alert.content = 'There\' some error \n or you probably has upvote this'
+          this.alert.ok = 'Sad:('
+          this.openDialog('commentNotif')
+          console.error(err)
+        })
+      } else {
+        this.$swal({
+          type: 'error',
+          text: 'Login First !'
+        })
+      }
     },
     downVoteQuestion (id) {
-      this.$http.put('/questions/downvote/' + this.question_id, {
-        user: localStorage.getItem('token')
-      }).then(({data}) => {
-        this.question.votes--
-        this.question.downvotes++
-        this.alert.content = 'You downvote to this question'
-        this.alert.ok = 'Cool!'
-        this.openDialog('commentNotif')
-      }).catch(err => {
-        this.alert.content = 'There\' some error \n or you probably has upvote this'
-        this.alert.ok = 'Sad:('
-        this.openDialog('commentNotif')
-        console.error(err)
-      })
+      if (this.$store.state.loggedIn) {
+        this.$http.put('/questions/downvote/' + this.question_id, {
+          user: localStorage.getItem('token')
+        }).then(({data}) => {
+          this.question.votes--
+          this.question.downvotes++
+          if (data.message.indexOf('Old') > -1) {
+            this.question.upvotes--
+          }
+          this.alert.content = 'You downvote to this question'
+          this.alert.ok = 'Cool!'
+          this.openDialog('commentNotif')
+        }).catch(err => {
+          this.alert.content = 'There\' some error \n or you probably has upvote this'
+          this.alert.ok = 'Sad:('
+          this.openDialog('commentNotif')
+          console.error(err)
+        })
+      } else {
+        this.$swal({
+          type: 'error',
+          text: 'Login First !'
+        })
+      }
     },
     upVoteAnswer (id) {
-      this.$http.put('/answers/upvote/' + id, {
-        user: localStorage.getItem('token')
-      }).then(({data}) => {
-        var index = this.answers.findIndex((element) => {
-          if (element._id === id) {
-            return element
+      if (this.$store.state.loggedIn) {
+        this.$http.put('/answers/upvote/' + id, {
+          user: localStorage.getItem('token')
+        }).then(({data}) => {
+          var index = this.answers.findIndex((element) => {
+            if (element._id === id) {
+              return element
+            }
+          })
+          if (data.message.indexOf('Old') > -1) {
+            this.answers[index].downvotes--
           }
+          this.answers[index].upvotes++
+          this.answers[index].votes++
+          this.alert.content = 'You upvote to this answer'
+          this.alert.ok = 'Cool!'
+          this.openDialog('commentNotif')
+        }).catch(err => {
+          this.alert.content = 'There\' some error \n or you probably has upvote this'
+          this.alert.ok = 'Sad:('
+          this.openDialog('commentNotif')
+          console.log('hubaaaa')
+          console.error(err)
         })
-        this.answers[index].upvotes++
-        this.answers[index].votes++
-        this.alert.content = 'You upvote to this answer'
-        this.alert.ok = 'Cool!'
-        this.openDialog('commentNotif')
-      }).catch(err => {
-        this.alert.content = 'There\' some error \n or you probably has upvote this'
-        this.alert.ok = 'Sad:('
-        this.openDialog('commentNotif')
-        console.log('hubaaaa')
-        console.error(err)
-      })
+      } else {
+        this.$swal({
+          type: 'error',
+          text: 'Login First !'
+        })
+      }
     },
     downVoteAnswer (id) {
-      this.$http.put('/answers/downvote/' + id, {
-        user: localStorage.getItem('token')
-      }).then(({data}) => {
-        var index = this.answers.findIndex((element) => {
-          if (element._id === id) {
-            return element
+      if (this.$store.state.loggedIn) {
+        this.$http.put('/answers/downvote/' + id, {
+          user: localStorage.getItem('token')
+        }).then(({data}) => {
+          var index = this.answers.findIndex((element) => {
+            if (element._id === id) {
+              return element
+            }
+          })
+          if (data.message.indexOf('Old') > -1) {
+            this.answers[index].upvotes--
           }
+          this.answers[index].downvotes++
+          this.answers[index].votes--
+          this.alert.content = 'You downvote to this answer'
+          this.alert.ok = 'Cool!'
+          this.openDialog('commentNotif')
+        }).catch(err => {
+          this.alert.content = 'There\' some error \n or you probably has upvote this'
+          this.alert.ok = 'Sad:('
+          this.openDialog('commentNotif')
+          console.error(err)
         })
-        this.answers[index].downvotes++
-        this.answers[index].votes--
-        this.alert.content = 'You downvote to this answer'
-        this.alert.ok = 'Cool!'
-        this.openDialog('commentNotif')
-      }).catch(err => {
-        this.alert.content = 'There\' some error \n or you probably has upvote this'
-        this.alert.ok = 'Sad:('
-        this.openDialog('commentNotif')
-        console.error(err)
-      })
+      } else {
+        this.$swal({
+          type: 'error',
+          text: 'Login First !'
+        })
+      }
     },
     postNewAnswer () {
       if (this.$store.state.loggedIn) {
@@ -222,7 +262,10 @@ export default {
           console.error(err)
         })
       } else {
-        alert('login dulu')
+        this.$swal({
+          type: 'error',
+          text: 'Login First !'
+        })
       }
     },
     calculateDate (tanggal) {

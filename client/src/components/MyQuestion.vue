@@ -51,6 +51,7 @@
 
 <script>
 import FormQuestion from '@/components/FormQuestion'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -60,7 +61,6 @@ export default {
   data () {
     return {
       search: '',
-      questions: [],
       isEdit: false,
       question: {
         title: '',
@@ -75,14 +75,8 @@ export default {
     }
   },
   methods: {
-    getQuestions () {
-      this.$http.get('/questions/posted_by/' + localStorage.getItem('token')).then(({data}) => {
-        this.questions = data.data
-      }).catch((err) => {
-        console.error(err)
-      })
-    },
     openQuestionDialog () {
+      this.isEdit = false
       this.$refs.componentFormQuestion.openDialog('dialogFormQuestion')
     },
     deleteQuestion (id) {
@@ -90,12 +84,13 @@ export default {
         this.$refs['updateQuestionNotif'].open()
         this.alert.content = 'You have successfully delete a question'
         this.alert.ok = 'Cool!'
-        var index = this.questions.findIndex((element) => {
-          if (element._id === id) {
-            return element
-          }
-        })
-        this.questions.splice(index, 1)
+        // var index = this.questions.findIndex((element) => {
+        //   if (element._id === id) {
+        //     return element
+        //   }
+        // })
+        // this.questions.splice(index, 1)
+        this.$store.commit('deleteQuestionUser', id)
         console.log(data)
       }).catch((err) => {
         this.$refs['updateQuestionNotif'].open()
@@ -118,23 +113,32 @@ export default {
       this.openQuestionDialog()
     },
     editedQuestion (val) {
-      var index = this.questions.findIndex((element) => {
-        if (element._id === val.data._id) {
-          return element
-        }
-      })
-      this.questions[index] = val.data
-      console.log(index)
-      console.log(this.questions[index])
+      // var index = this.questions.findIndex((element) => {
+      //   if (element._id === val.data._id) {
+      //     return element
+      //   }
+      // })
+      // this.questions[index] = val.data
+      this.$store.commit('editQuestionUser', val.data)
+      // console.log(index)
+      // console.log(this.questions[index])
     },
     addedQuestion (val) {
-      this.questions.unshift(val.data)
-    }
+      // this.questions.unshift(val.data)
+      this.$store.commit('addQuestionUser', val.data)
+    },
+    ...mapActions([
+      'getQuestionsUser'
+    ])
   },
   created () {
-    this.getQuestions()
+    this.getQuestionsUser()
   },
   computed: {
+    questions () {
+      console.log('sini')
+      return this.$store.state.questionsUser
+    },
     computeQuestion () {
       if (this.search) {
         var showedData = []

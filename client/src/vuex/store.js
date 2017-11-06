@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const initialState = {
   questions: [],
+  questionsUser: [],
   loggedIn: false
 }
 

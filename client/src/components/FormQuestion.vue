@@ -33,6 +33,7 @@
 </template>
 
 <script>
+var _ = require('lodash')
 
 export default {
   props: ['isEdit', 'question'],
@@ -80,6 +81,9 @@ export default {
           this.alert.content = 'Your question successfully updated'
           this.alert.ok = 'Cool!'
           console.log(data)
+          this.question.title = ''
+          this.question.content = ''
+          this.question.tags = ''
           this.closeDialog('dialogFormQuestion')
           this.$emit('editQuestion', data)
         }).catch((err) => {
@@ -99,6 +103,9 @@ export default {
           this.alert.content = 'You have successfully post a question'
           this.alert.ok = 'Cool!'
           console.log(data)
+          this.question.title = ''
+          this.question.content = ''
+          this.question.tags = ''
           this.closeDialog('dialogFormQuestion')
           this.$emit('addedQuestion', data)
         }).catch((err) => {
@@ -109,18 +116,30 @@ export default {
         })
       }
     },
-    generateTags () {
-      // this.$http.get('/users/aylien/' + this.question.content).then(({data}) => {
-      //   console.log(data.hashtags.join(' '))
-      //   this.question.tags = data.hashtags.join(' ')
-      // }).catch((err) => {
-      //   console.error(err)
-      // })
-    }
+    generateTags: _.debounce(
+      function () {
+        // this.$http.get('/users/aylien/' + this.question.content).then(({data}) => {
+        //   console.log(data.hashtags.join(' '))
+        //   this.question.tags = data.hashtags.join(' ')
+        // }).catch((err) => {
+        //   console.error(err)
+        // })
+      },
+      1000
+    )
   },
   mounted () {
     this.titleText()
     this.buttonName()
+  },
+  watch: {
+    content: {
+      function (newContent) {
+        this.tags = 'Tags will generate automatically when you stop typing'
+        this.generateTags()
+      },
+      deep: true
+    }
   }
 }
 </script>

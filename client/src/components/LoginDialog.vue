@@ -15,7 +15,7 @@
       </md-dialog-content>
       <md-dialog-actions>
         <md-button class="md-primary" @click="openDialog('Register')">SignUp</md-button>
-        <md-button class="md-primary" @click="">Login with Facebok</md-button>
+        <md-button class="md-primary" @click="loginFB">Login with Facebok</md-button>
         <md-button class="md-primary" type="submit">Login</md-button>
       </md-dialog-actions>
     </form>
@@ -107,6 +107,30 @@ export default {
         this.alert.ok = 'Sad:('
         this.openDialog('dialog3')
         console.error(err)
+      })
+    },
+    loginFB () {
+      window.FB.login((response) => {
+        console.log(response)
+        this.$http.post('/auth/loginFb', {
+          accessToken: response.authResponse.accessToken,
+          fb_id: response.authResponse.userID
+        }).then((res) => {
+          this.closeDialog('Login')
+          this.openDialog('dialog3')
+          this.alert.content = 'You have successfully logged in using facebook'
+          this.alert.ok = 'Yeah!'
+          localStorage.setItem('token', res.data.token)
+          this.$store.commit('toggleLog')
+          console.log(res)
+        }).catch((err) => {
+          this.alert.content = 'There\' some error'
+          this.alert.ok = 'Sad:('
+          this.openDialog('dialog3')
+          console.error(err)
+        })
+      }, {
+        scope: 'public_profile,email'
       })
     }
   }

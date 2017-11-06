@@ -8,10 +8,14 @@ import store from './vuex/store'
 import axios from 'axios'
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.css'
+import 'sweetalert2/dist/sweetalert2.min.css'
+import 'sweetalert2/dist/sweetalert2.min.js'
 
 Vue.config.productionTip = false
+Vue.prototype.$swal = swal
 Vue.prototype.$http = axios.create({
-  baseURL: 'https://hacktivoverflow-api.lokilokostudio.tk/api',
+  // baseURL: 'https://hacktivoverflow-api.lokilokostudio.tk/api',
+  baseURL: 'http://localhost:3000/api',
   headers: {
     'token': localStorage.getItem('token')
   }
