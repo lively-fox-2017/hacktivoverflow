@@ -11,6 +11,7 @@ import vueMoment from 'vue-moment'
 
 Vue.prototype.$axios = axios.create({
   baseURL: 'http://localhost:3000'
+  // baseURL: 'http://ec2-52-34-18-0.us-west-2.compute.amazonaws.com'
 })
 
 Vue.use(swal)

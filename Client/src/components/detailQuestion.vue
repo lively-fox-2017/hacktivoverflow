@@ -1,7 +1,11 @@
 <template lang="html">
   <div>
     <div class="col-md-8 col-sm-12 col-md-offset-2">
-      <div class="votes col-md-1 text-center bg-success" @click="voteQuestion">
+      <div class="votes col-md-1 text-center bg-success" @click="voteQuestion" v-if="question.voters.indexOf(userId) == -1">
+        <h2>{{ question.votersCount }}</h2>
+        <h4>Votes</h4>
+      </div>
+      <div class="votes col-md-1 text-center bg-success red" data-toggle="tooltip" data-placement="left" title="You are already vote this, Click to down vote" @click="voteQuestion" v-else>
         <h2>{{ question.votersCount }}</h2>
         <h4>Votes</h4>
       </div>
@@ -33,6 +37,9 @@ export default {
     },
     isLogin () {
       return this.$store.state.isLogin
+    },
+    userId () {
+      return this.$store.state.userId
     }
   },
   methods: {
@@ -104,6 +111,10 @@ export default {
     -webkit-transition: all 1s ease;
     -moz-transition: all 1s ease;
     -o-transition: all 1s ease;
+  }
+
+  .red:hover{
+    background-color: red;
   }
 
   .question{

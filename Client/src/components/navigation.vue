@@ -128,6 +128,7 @@ export default {
 
         localStorage.removeItem('token')
         this.$store.commit('setLogin', false)
+        this.$store.commit('setUserId', '')
       })
     }
   }
