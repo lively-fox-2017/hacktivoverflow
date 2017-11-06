@@ -23,8 +23,9 @@
           </li>
         </ul>
         <div class="navbar-form navbar-right">
+          <router-link to="/register" class="btn btn-primary">Register</router-link>
           <router-link to="/login" class="btn btn-primary">Login</router-link>
-          <router-link to="/logout" class="btn btn-danger">Logout</router-link>
+          <a href="#" @click="logout" class="btn btn-danger">Logout</a>
         </div>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -32,7 +33,15 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    methods: {
+      logout () {
+        localStorage.removeItem('access_token')
+        this.$store.commit('updateLoggedInState')
+        this.$swal('Logged Out!', 'See you later', 'success')
+      }
+    }
+  }
 </script>
 
 <style>

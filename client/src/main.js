@@ -4,6 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import store from './vuex/store'
+
 import axios from 'axios'
 import SweetAlert from 'sweetalert'
 
@@ -19,6 +21,7 @@ Vue.prototype.$swal = swal
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })
