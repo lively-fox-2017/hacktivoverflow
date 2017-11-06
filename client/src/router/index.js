@@ -5,6 +5,7 @@ import Register from '@/components/Register'
 import Login from '@/components/Login'
 import Questions from '@/components/Questions'
 import PostQuestion from '@/components/PostQuestion'
+import EditQuestion from '@/components/EditQuestion'
 import QuestionContent from '@/components/QuestionContent'
 
 Vue.use(Router)
@@ -52,6 +53,18 @@ export default new Router({
           next('/')
       },
       component: PostQuestion
+    },
+    {
+      path: '/edit-question/:slug',
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('access_token'))
+          next()
+        else
+          next('/')
+      },
+      name: 'EditQuestion',
+      component: EditQuestion,
+      props: true
     },
     {
       path: '/questions/:slug',
