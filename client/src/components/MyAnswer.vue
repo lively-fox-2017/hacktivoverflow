@@ -83,6 +83,7 @@ export default {
       })
       this.answer._id = this.answers[index]._id
       this.answer.answer = this.answers[index].answer
+
       this.openQuestionDialog()
     },
     deleteAnswer (id) {
@@ -110,7 +111,11 @@ export default {
           return element
         }
       })
-      this.answers[index] = val.data
+      // this.answers[index] = val.data
+      // this.answers.splice(index, 1)
+      // this.answers.splice(index, 0, val.data)
+      this.$set(this.answers[index], 'answer', val.data.answer)
+      console.log(val.data)
     }
   },
   created () {

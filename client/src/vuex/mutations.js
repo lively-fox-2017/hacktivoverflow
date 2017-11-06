@@ -9,6 +9,9 @@ const mutations = {
   setQuestions (state, payload) {
     state.questions = payload
   },
+  setUsername (state, payload) {
+    state.username = payload
+  },
   setQuestionsUser (state, payload) {
     state.questionsUser = payload
   },
@@ -29,7 +32,11 @@ const mutations = {
         return element
       }
     })
-    state.questionsUser[index] = payload
+    // Vue.$set(state.questionsUser[index], 'title', payload.title)
+    // Vue.$set(state.questionsUser[index], 'content', payload.content)
+    // state.questionsUser[index] = payload
+    state.questionsUser.splice(index, 1)
+    state.questionsUser.splice(index, 0, payload)
   }
 }
 

@@ -19,6 +19,15 @@ const actions = {
     }).catch((err) => {
       console.error(err)
     })
+  },
+  getUserData ({ commit }) {
+    if (localStorage.getItem('token')) {
+      http.get('/users/' + localStorage.getItem('token')).then(({data}) => {
+        commit('setUsername', data.data.username)
+      }).catch((err) => {
+        console.error(err)
+      })
+    }
   }
 }
 

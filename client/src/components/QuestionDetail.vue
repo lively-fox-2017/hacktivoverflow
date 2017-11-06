@@ -32,7 +32,7 @@
       <md-divider />
       <md-divider />
 
-      <md-card v-for="answer in answers">
+      <md-card v-for="answer in answers" :key="answer._id">
         <md-card-header>
           <md-card-header-text>
             <!-- <div class="md-title">{{answer}}</div> -->
@@ -61,6 +61,9 @@
         <md-card-content>
           {{answer.answer}}
         </md-card-content>
+        <md-card-actions v-if="$store.state.username === answer.posted_by.username">
+          <md-button class="md-raised md-warn" @click="editAnswer(answer._id)">Edit</md-button>
+        </md-card-actions>
         <md-divider />
         <md-divider />
         <md-divider />
@@ -95,11 +98,17 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   props: ['question_id'],
   data: () => {
     return {
-      question: [],
+      question: {
+        posted_by: {
+          username: ''
+        }
+      },
       answers: [],
       textAnswer: '',
       alert: {
@@ -111,6 +120,9 @@ export default {
   methods: {
     openDialog (ref) {
       this.$refs[ref].open()
+    },
+    editAnswer (id) {
+      this.$router.push('/dashboard')
     },
     getQuestionsData () {
       this.$http.get('/questions/' + this.question_id).then(({data}) => {
@@ -195,6 +207,7 @@ export default {
           this.answers[index].votes++
           this.alert.content = 'You upvote to this answer'
           this.alert.ok = 'Cool!'
+          this.sorting()
           this.openDialog('commentNotif')
         }).catch(err => {
           this.alert.content = 'There\' some error \n or you probably has upvote this'
@@ -228,6 +241,7 @@ export default {
           this.alert.content = 'You downvote to this answer'
           this.alert.ok = 'Cool!'
           this.openDialog('commentNotif')
+          this.sorting()
         }).catch(err => {
           this.alert.content = 'There\' some error \n or you probably has upvote this'
           this.alert.ok = 'Sad:('
@@ -249,11 +263,15 @@ export default {
           posted_by: localStorage.getItem('token')
         }
         this.$http.post('/answers', body).then(({data}) => {
+          data.data.votes = 0
+          data.data.upvotes = 0
+          data.data.downvotes = 0
           this.answers.unshift(data.data)
           this.textAnswer = ''
           this.alert.content = 'Your comment has successfully posted'
           this.alert.ok = 'Cool!'
           this.openDialog('commentNotif')
+          this.sorting()
         }).catch(err => {
           this.alert.content = 'There\' some error'
           this.alert.ok = 'Sad:('
@@ -280,6 +298,9 @@ export default {
         hours += ' hour '
       }
       return hours
+    },
+    sorting () {
+      this.answers = _.sortBy(this.answers, ['votes']).reverse()
     }
   },
   created: function () {
@@ -290,6 +311,11 @@ export default {
     question_id (watched) {
       this.question_id = watched
       this.getArticleData()
+    }
+  },
+  computed: {
+    sortedAnswer () {
+      return _.sortBy(this.answers, ['votes']).reverse()
     }
   }
 }

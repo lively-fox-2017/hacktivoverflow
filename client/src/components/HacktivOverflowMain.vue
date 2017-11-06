@@ -36,11 +36,13 @@ export default {
       this.search = val
     },
     ...mapActions([
-      'getAllQuestions'
+      'getAllQuestions',
+      'getUserData'
     ])
   },
   created () {
     this.getAllQuestions()
+    this.getUserData()
   }
 }
 </script>
