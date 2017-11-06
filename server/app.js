@@ -1,24 +1,23 @@
-var express = require('express');
-var cors = require('cors')
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var app = express();
+const express = require('express');
+const app = express()
+const bodyParser = require('body-parser')
+const cors = require('cors')
+
 app.use(cors())
 
-mongoose.connect('mongodb://localhost/hacktivoverflow');
-// var index = require('./routes/index');
-var user = require('./routes/user')
-var question = require('./routes/question')
-var answer = require('./routes/answer')
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.set('view engine', 'html');
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
-// app.use('/', index);
-app.use('/user',user)
-app.use('/question',question)
-app.use('/answer',answer)
+const signup = require('./routes/signup')
+const signin = require('./routes/signin')
+const index = require('./routes/index')
+const question = require('./routes/question')
 
-app.listen(3001, function () {
-  console.log('Example app listening on port 3001!')
+app.use('/signup', signup)
+app.use('/signin', signin)
+app.use('/', index)
+app.use('/question', question)
+
+app.listen(3000, () => {
+  console.log(`AYO JALAN!`)
 })
