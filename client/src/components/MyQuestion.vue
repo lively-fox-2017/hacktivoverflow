@@ -7,7 +7,7 @@
     </md-card-header>
 
     <md-card-content>
-      <md-button class="md-raised md-primary" id="custom" @click="openQuestionDialog">Add New</md-button>
+      <md-button class="md-raised md-primary" id="custom" @click="addQuestionDialog">Add New</md-button>
       <md-input-container>
         <label>Search</label>
         <md-input type="text" v-model="search"></md-input>
@@ -76,8 +76,15 @@ export default {
   },
   methods: {
     openQuestionDialog () {
-      this.isEdit = false
       this.$refs.componentFormQuestion.openDialog('dialogFormQuestion')
+    },
+    addQuestionDialog () {
+      this.isEdit = false
+      this.question.title = ''
+      this.question.content = ''
+      this.question.tags = ''
+      this.question.edit = false
+      this.openQuestionDialog()
     },
     deleteQuestion (id) {
       this.$http.delete('/questions/' + id).then(({data}) => {
