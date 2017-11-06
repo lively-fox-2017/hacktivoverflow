@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const AnswerCtrl = require('../controllers/AnswerCtrl')
+const AnswerCtrl = require('../controllers/answerCtrl')
 const AuthHelper = require('../helpers/authHelper')
 
 router.get('/:question_id', AnswerCtrl.readOneByQuestionId)

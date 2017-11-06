@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const QuestionCtrl = require('../controllers/QuestionCtrl')
+const QuestionCtrl = require('../controllers/questionCtrl')
 const AuthHelper = require('../helpers/authHelper')
 
 router.get('/', QuestionCtrl.read)
