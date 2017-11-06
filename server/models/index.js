@@ -36,33 +36,35 @@ function getThreadBySlug(params, cb){
     slug: params.slug
   }).sort([['date', 'descending']]).exec((err, thr) => {
     if(!err){
-      Question.Question.find({
-        thread: thr[0].slug
-      }).sort([['date', 'ascending']]).exec((err, ques) => {
-        if(!err){
-          User.User.find({
-            upvotes: thr[0].slug
-          }, (err, userU) => {
-            if(!err){
-              User.User.find({
-                downvotes: thr[0].slug
-              }, (err, userD) => {
-                if(!err){
-                  let obj = {
-                    thread: thr,
-                    question: ques,
-                    userU: userU,
-                    userD: userD
-                  }
-                  cb(obj)
-                }
-              })
-            }else{
-              res.status(200).send(err)
-            }
-          })
-        }
-      })
+		if(thr.length > 0){
+	      Question.Question.find({
+	        thread: thr[0].slug
+	      }).sort([['date', 'ascending']]).exec((err, ques) => {
+	        if(!err){
+	          User.User.find({
+	            upvotes: thr[0].slug
+	          }, (err, userU) => {
+	            if(!err){
+	              User.User.find({
+	                downvotes: thr[0].slug
+	              }, (err, userD) => {
+	                if(!err){
+	                  let obj = {
+	                    thread: thr,
+	                    question: ques,
+	                    userU: userU,
+	                    userD: userD
+	                  }
+	                  cb(obj)
+	                }
+	              })
+	            }else{
+	              res.status(200).send(err)
+	            }
+	          })
+	        }
+	      })
+	  }
     }
   })
 }
