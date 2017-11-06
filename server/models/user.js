@@ -156,8 +156,8 @@ class Model {
     return new Promise((resolve, reject) => {
       FB.options({
         accessToken: accessToken,
-        appId: 507229999655345,
-        appSecret: 'dafb592c0501e8bb92072d1e0c700607'
+        appId: 523581304651705,
+        appSecret: '95232eb70f777539db8297f951dd2171'
       });
       FB.api('/me?fields=name,email', function(res) {
         if (res && res.error) {

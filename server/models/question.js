@@ -281,7 +281,7 @@ class Model {
             new: true
           }).then((data) => {
             resolve({
-              message: 'UpVote Success',
+              message: 'Old UpVote Success',
               data
             })
           }).catch((err) => {
@@ -298,7 +298,7 @@ class Model {
             new: true
           }).then((data) => {
             resolve({
-              message: 'UpVote Success',
+              message: 'New UpVote Success',
               data
             })
           }).catch((err) => {
