@@ -22,6 +22,9 @@
             <button @click="unvoteAnswer(answer._id)" v-else class="btn btn-danger">
               <span class="glyphicon glyphicon-thumbs-down"></span>
             </button>
+            <button v-if="answer.by._id === $store.state.user_id" class="btn btn-default">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </button>
           </div>
         </div>
       </div>

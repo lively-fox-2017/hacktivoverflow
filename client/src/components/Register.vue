@@ -6,7 +6,7 @@
         <form v-on:submit.prevent="register">
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" v-model="name" autocomplete="off" required>
+            <input type="text" class="form-control" v-model="name" autocomplete="off" ref="name" required>
           </div>
           <div class="form-group">
             <label for="email">Email</label>
@@ -50,6 +50,9 @@
             this.$swal('Error!', 'There\'s a trouble while processing your request', 'error')
           })
       }
+    },
+    mounted () {
+      this.$refs.name.focus()
     }
   }
 </script>

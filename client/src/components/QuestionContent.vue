@@ -10,14 +10,19 @@
           </span>
         </h1>
         <p>{{ question.content }}</p>
-        <p class="text-muted">By: {{ question.author.name }}</p>
+        <p class="text-muted">
+          By: {{ (question.author._id === $store.state.user_id) ? 'You' : question.author.name }}
+        </p>
         <template v-if="isLoggedIn">
-          <a href="#" @click="voteQuestion(question.slug)" v-if="!question.voted" class="btn btn-primary">
+          <button @click="voteQuestion(question.slug)" v-if="!question.voted" class="btn btn-primary">
             <span class="glyphicon glyphicon-thumbs-up"></span>
-          </a>
-          <a href="#" @click="unvoteQuestion(question.slug)" v-else class="btn btn-danger">
+          </button>
+          <button @click="unvoteQuestion(question.slug)" v-else class="btn btn-danger">
             <span class="glyphicon glyphicon-thumbs-down"></span>
-          </a>
+          </button>
+          <button class="btn btn-default">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </button>
         </template>
         <hr>
       </div>

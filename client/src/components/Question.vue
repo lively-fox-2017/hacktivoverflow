@@ -9,13 +9,18 @@
             {{ question.votes }}
           </span>
         </h1>
-        <p class="text-muted">By: {{ question.author.name }}</p>
+        <p class="text-muted">
+          By: {{ (question.author._id === $store.state.user_id) ? 'You' : question.author.name }}
+        </p>
         <template v-if="isLoggedIn">
           <button @click="voteQuestion(question.slug)" v-if="!question.voted" class="btn btn-primary">
             <span class="glyphicon glyphicon-thumbs-up"></span>
           </button>
-          <button href="#" @click="unvoteQuestion(question.slug)" v-else class="btn btn-danger">
+          <button @click="unvoteQuestion(question.slug)" v-else class="btn btn-danger">
             <span class="glyphicon glyphicon-thumbs-down"></span>
+          </button>
+          <button class="btn btn-default">
+            <span class="glyphicon glyphicon-pencil"></span>
           </button>
         </template>
         <router-link class="btn btn-default" :to="{ name: 'QuestionContent', params: { slug: question.slug } }">

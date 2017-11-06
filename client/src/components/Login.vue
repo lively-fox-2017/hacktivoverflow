@@ -6,7 +6,7 @@
         <form v-on:submit.prevent="login">
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" v-model="email" autocomplete="off" required>
+            <input type="email" ref="email" class="form-control" v-model="email" autocomplete="off" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
@@ -46,6 +46,9 @@
             this.$swal('Oops!', 'Email/Password is wrong', 'error')
           })
       }
+    },
+    mounted () {
+      this.$refs.email.focus()
     }
   }
 </script>
