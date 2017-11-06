@@ -11,12 +11,12 @@
         </h1>
         <p class="text-muted">By: {{ question.author.name }}</p>
         <template v-if="isLoggedIn">
-          <a href="#" class="btn btn-primary">
+          <button @click="voteQuestion(question.slug)" v-if="!question.voted" class="btn btn-primary">
             <span class="glyphicon glyphicon-thumbs-up"></span>
-          </a>
-          <a href="#" class="btn btn-danger">
+          </button>
+          <button href="#" @click="unvoteQuestion(question.slug)" v-else class="btn btn-danger">
             <span class="glyphicon glyphicon-thumbs-down"></span>
-          </a>
+          </button>
         </template>
         <router-link class="btn btn-default" :to="{ name: 'QuestionContent', params: { slug: question.slug } }">
           See answers
@@ -30,6 +30,32 @@
 <script>
   export default {
     props: ['questions'],
+    methods: {
+      voteQuestion (slug) {
+        this.$http.patch('/questions/vote', {
+          slug: slug,
+          user_id: this.$store.state.user_id
+        })
+          .then((response) => {
+            this.$emit('voteQuestion')
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+      unvoteQuestion (slug) {
+        this.$http.patch('/questions/unvote', {
+          slug: slug,
+          user_id: this.$store.state.user_id
+        })
+          .then((response) => {
+            this.$emit('unvoteQuestion')
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      }
+    },
     computed: {
       isLoggedIn () {
         return this.$store.state.loggedIn

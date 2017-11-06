@@ -9,11 +9,17 @@ import store from './vuex/store'
 import axios from 'axios'
 import SweetAlert from 'sweetalert'
 
+import lodash from 'lodash'
+
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+
 Vue.config.productionTip = false
 
 Vue.prototype.$http = axios.create({
   baseURL: 'http://localhost:3000'
 })
+
+Vue.prototype.$_ = _
 
 Vue.prototype.$swal = swal
 

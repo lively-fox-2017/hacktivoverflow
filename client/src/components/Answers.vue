@@ -16,12 +16,12 @@
             {{ answer.content }}
           </div>
           <div class="panel-footer">
-            <a href="#" class="btn btn-primary">
+            <button @click="voteAnswer(answer._id)" v-if="!answer.voted" class="btn btn-primary">
               <span class="glyphicon glyphicon-thumbs-up"></span>
-            </a>
-            <a href="#" class="btn btn-danger">
+            </button>
+            <button @click="unvoteAnswer(answer._id)" v-else class="btn btn-danger">
               <span class="glyphicon glyphicon-thumbs-down"></span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -32,6 +32,32 @@
 <script>
   export default {
     props: ['answers'],
+    methods: {
+      voteAnswer (id) {
+        this.$http.patch('/answers/vote', {
+          id: id,
+          user_id: this.$store.state.user_id
+        })
+          .then((response) => {
+            this.$emit('voteAnswer')
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+      unvoteAnswer (id) {
+        this.$http.patch('/answers/unvote', {
+          id: id,
+          user_id: this.$store.state.user_id
+        })
+          .then((response) => {
+            this.$emit('unvoteAnswer')
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+    }
   }
 </script>
 

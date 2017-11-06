@@ -12,10 +12,10 @@
         <p>{{ question.content }}</p>
         <p class="text-muted">By: {{ question.author.name }}</p>
         <template v-if="isLoggedIn">
-          <a href="#" class="btn btn-primary">
+          <a href="#" @click="voteQuestion(question.slug)" v-if="!question.voted" class="btn btn-primary">
             <span class="glyphicon glyphicon-thumbs-up"></span>
           </a>
-          <a href="#" class="btn btn-danger">
+          <a href="#" @click="unvoteQuestion(question.slug)" v-else class="btn btn-danger">
             <span class="glyphicon glyphicon-thumbs-down"></span>
           </a>
         </template>
@@ -36,7 +36,11 @@
         </form>
       </div>
       <div class="col-md-8">
-        <Answers :answers="answers" />
+        <Answers
+          :answers="answers"
+          @voteAnswer="fetchQuestionAnswers"
+          @unvoteAnswer="fetchQuestionAnswers"
+        />
       </div>
     </div>
   </div>
@@ -58,16 +62,44 @@
     },
     methods: {
       fetchQuestionAnswers () {
-        this.$http.get(`/questions/${this.slug}`)
+        const userId = this.$store.state.user_id
+        const userIdQuery = userId ? `?user_id=${userId}` : ''
+        this.$http.get(`/questions/${this.slug}${userIdQuery}`)
           .then(({ data }) => {
             this.question = data
-            this.$http.get(`/answers/question/${data._id}`)
+            this.$http.get(`/answers/question/${data._id}${userIdQuery}`)
               .then(({ data }) => {
                 this.answers = data
               })
               .catch((err) => {
                 console.error(err)
               })
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+      voteQuestion (slug) {
+        this.$http.patch('/questions/vote', {
+          slug: slug,
+          user_id: this.$store.state.user_id
+        })
+          .then((response) => {
+            this.question.voted = true
+            this.question.votes++
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+      unvoteQuestion (slug) {
+        this.$http.patch('/questions/unvote', {
+          slug: slug,
+          user_id: this.$store.state.user_id
+        })
+          .then((response) => {
+            this.question.voted = false
+            this.question.votes--
           })
           .catch((err) => {
             console.error(err)

@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <Question :questions="questions" />
+    <Question
+      :questions="questions"
+      @unvoteQuestion="fetchQuestions"
+      @voteQuestion="fetchQuestions"
+    />
   </div>
 </template>
 
@@ -17,7 +21,9 @@
     },
     methods: {
       fetchQuestions () {
-        this.$http.get('/questions')
+        const userId = this.$store.state.user_id
+        const userIdQuery = userId ? `?user_id=${userId}` : ''
+        this.$http.get(`/questions${userIdQuery}`)
           .then(({ data }) => {
             this.questions = data
           })
