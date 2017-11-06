@@ -2,6 +2,8 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const slug = require('slug');
 
+const Answer = require('./Answer');
+
 mongoose.connection.openUri(process.env.MONGO_URL);
 
 const Schema = mongoose.Schema;

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Question = require('../models/Question');
+const Answer = require('../models/Answer');
 
 const questionQuery = [
   {
@@ -158,7 +159,17 @@ class QuestionController {
           Question
             .deleteOne({ slug: req.params.slug })
             .then((response) => {
-              res.status(200).json(question);
+
+              Answer
+                .remove({ question: question._id })
+                .then((response) => {
+                  console.log('POST REMOVE QUESTION')
+                  res.status(200).json(question);
+                })
+                .catch((err) => {
+                  console.log(err)
+                })
+
             })
             .catch((err) => {
               res.status(400).json(err);
