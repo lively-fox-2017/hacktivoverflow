@@ -1,10 +1,13 @@
 <template>
   <div class="container">
     <Question
+      v-if="questions.length"
       :questions="questions"
       @unvoteQuestion="fetchQuestions"
       @voteQuestion="fetchQuestions"
+      @deleteQuestion="fetchQuestions"
     />
+    <h1 v-else class="text-muted text-center">No questions available</h1>
   </div>
 </template>
 

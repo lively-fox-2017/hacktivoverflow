@@ -20,12 +20,14 @@
           <button @click="unvoteQuestion(question.slug)" v-else class="btn btn-default">
             <span class="glyphicon glyphicon-thumbs-down"></span>
           </button>
-          <button class="btn btn-default">
-            <span class="glyphicon glyphicon-pencil"></span>
-          </button>
-          <button class="btn btn-danger">
-            <span class="glyphicon glyphicon-trash"></span>
-          </button>
+          <template v-if="question.author._id === $store.state.user_id">
+            <button class="btn btn-default">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+            <button class="btn btn-danger" @click="confirmDeleteQuestion(question.slug)">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </template>
         </template>
         <hr>
       </div>
@@ -45,10 +47,13 @@
       </div>
       <div class="col-md-8">
         <Answers
+          v-if="answers.length"
           :answers="answers"
           @voteAnswer="fetchQuestionAnswers"
           @unvoteAnswer="fetchQuestionAnswers"
+          @deleteAnswer="fetchQuestionAnswers"
         />
+        <p v-else class="text-muted text-center">No answers yet</p>
       </div>
     </div>
   </div>
@@ -86,6 +91,29 @@
           .catch((err) => {
             console.error(err)
           })
+      },
+      deleteQuestion (slug) {
+        this.$http.delete(`/questions/${slug}`)
+          .then((response) => {
+            this.$swal('Successfully deleted!', { icon: 'success' })
+            this.$router.push('/questions')
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+      confirmDeleteQuestion (slug) {
+        this.$swal({
+          title: 'Delete this question?',
+          text: 'You can\'t undo this action',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true
+        }).then((confirmed) => {
+          if (confirmed) {
+            this.deleteQuestion(slug)
+          }
+        })
       },
       voteQuestion (slug) {
         this.$http.patch('/questions/vote', {

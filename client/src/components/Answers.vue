@@ -26,7 +26,7 @@
               <button class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span>
               </button>
-              <button class="btn btn-danger">
+              <button @click="confirmDeleteAnswer(answer._id)" class="btn btn-danger">
                 <span class="glyphicon glyphicon-trash"></span>
               </button>
             </template>
@@ -65,6 +65,29 @@
             console.error(err)
           })
       },
+      deleteAnswer (id) {
+        this.$http.delete(`/answers/${id}`)
+          .then((response) => {
+            this.$swal('Successfully deleted!', { icon: 'success' })
+            this.$emit('deleteAnswer')
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+      confirmDeleteAnswer (id) {
+        this.$swal({
+          title: 'Delete this answer?',
+          text: 'You can\'t undo this action',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true
+        }).then((confirmed) => {
+          if (confirmed) {
+            this.deleteAnswer(id)
+          }
+        })
+      }
     }
   }
 </script>

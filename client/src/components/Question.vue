@@ -23,7 +23,7 @@
             <button class="btn btn-default">
               <span class="glyphicon glyphicon-pencil"></span>
             </button>
-            <button class="btn btn-danger">
+            <button class="btn btn-danger" @click="confirmDeleteQuestion(question.slug)">
               <span class="glyphicon glyphicon-trash"></span>
             </button>
           </template>
@@ -64,6 +64,29 @@
           .catch((err) => {
             console.error(err)
           })
+      },
+      deleteQuestion (slug) {
+        this.$http.delete(`/questions/${slug}`)
+          .then((response) => {
+            this.$swal('Successfully deleted!', { icon: 'success' })
+            this.$emit('deleteQuestion')
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      },
+      confirmDeleteQuestion (slug) {
+        this.$swal({
+          title: 'Delete this question?',
+          text: 'You can\'t undo this action',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true
+        }).then((confirmed) => {
+          if (confirmed) {
+            this.deleteQuestion(slug)
+          }
+        })
       }
     },
     computed: {
