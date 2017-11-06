@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4">
-        <h1>Edit a Question</h1>
+        <h1>Edit your Question</h1>
         <form v-on:submit.prevent="updateQuestion">
           <div class="form-group">
             <label for="title">Title</label>
