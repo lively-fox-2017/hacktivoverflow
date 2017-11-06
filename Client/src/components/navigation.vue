@@ -8,13 +8,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Brand</a>
+        <a class="navbar-brand" href="#">Hacktiv Overflow</a>
       </div>
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
         <ul class="nav navbar-nav">
           <li class="active"><router-link to="/">Home</router-link></li>
-          <li v-if="isLogin == true"><a href="#">My Questions</a></li>
+          <li v-if="isLogin == true"><router-link to="/myQuestion">My Questions</router-link></li>
           <!-- login -->
           <li class="dropdown" v-if="isLogin == false">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Login <span class="caret"></span></a>
@@ -129,6 +129,7 @@ export default {
         localStorage.removeItem('token')
         this.$store.commit('setLogin', false)
         this.$store.commit('setUserId', '')
+        this.$router.go('/')
       })
     }
   }

@@ -15,9 +15,9 @@
         <h5 class='text-right'>answered by <span class="user">{{ value.user.username }}</span></h5>
       </div>
       <div class="col-md-1 col-sm-12 text-center" v-if="isLogin === true && value.user._id === userId">
-        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#myModal" @click="setModel(value._id)">Edit</a>
+        <a href="#" class="btn btn-success" data-toggle="modal" :data-target="'#myModal'+index" @click="setModel(value._id)">Edit</a>
 
-        <div id="myModal" class="modal fade" role="dialog">
+        <div :id="'myModal'+index" class="modal fade" role="dialog">
           <div class="modal-dialog">
 
             <!-- Modal content-->

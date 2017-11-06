@@ -5,62 +5,17 @@
     <h2 class="col-md-8 col-sm-12 col-md-offset-2 text-center">Top Questions</h2>
     <div class="list-group col-md-8 col-sm-12 col-md-offset-2">
       <a class="list-group-item col-md-12" v-for="(value, index) in Questions" :key="index">
-        <router-link :to="'/'+value._id">
+        <router-link :to="'/detailQuestion/'+value._id">
           <div class="votes col-md-1 text-center bg-success">
             <h2>{{ value.votersCount }}</h2>
             <h4>Votes</h4>
           </div>
-          <div class="col-md-10">
+          <div class="col-md-11">
             <h4 class="list-group-item-heading title">{{ value.title }} <span class='createdDate'>created at {{ value.createdAt | moment('D MMMM YYYY, h:mm') }}</span></h4><hr>
             <p class="list-group-item-text">{{ value.question.substring(0,80) }} ...</p>
             <h6 class='text-right'>asked by <span class="user">{{ value.user.username }}</span></h6>
           </div>
         </router-link>
-        <div class="col-md-1 col-sm-12 text-center" v-if="isLogin === true && value.user._id === userId">
-          <a href="#" class="btn btn-success" data-toggle="modal" data-target="#myModal" @click="setModel(value._id)">Edit</a>
-
-            <div id="myModal" class="modal fade" role="dialog">
-              <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Edit Question</h4>
-                  </div>
-                  <div class="modal-body">
-
-                    <form class="form-horizontal" @submit.prevent="editQuestion(value._id)">
-                      <fieldset>
-                        <div class="form-group">
-                          <label for="inputText" class="col-lg-2 control-label">Title</label>
-                          <div class="col-lg-10">
-                            <input class="form-control" id="inputText" placeholder="Title" type="text" v-model="questionEditForm.title" required>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="textArea" class="col-lg-2 control-label">Question</label>
-                          <div class="col-lg-10">
-                            <textarea class="form-control" rows="3" id="textArea" v-model="questionEditForm.question" required></textarea>
-                            <span class="help-block">Ask anything regarding the developer worlds.</span>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <div class="col-lg-10 col-lg-offset-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <button type="reset" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                          </div>
-                        </div>
-                      </fieldset>
-                    </form>
-
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          <a href="#" class="btn btn-danger" @click="deleteQuestion(value._id)">Delete</a>
-        </div>
       </a>
     </div>
   </div>
@@ -69,14 +24,6 @@
 <script>
 import askQuestion from '@/components/askQuestion'
 export default {
-  data () {
-    return {
-      questionEditForm: {
-        title: '',
-        question: ''
-      }
-    }
-  },
   components: {
     askQuestion
   },
@@ -89,74 +36,6 @@ export default {
     },
     userId () {
       return this.$store.state.userId
-    }
-  },
-  methods: {
-    deleteQuestion (questionId) {
-      let tkn = localStorage.getItem('token')
-      this.$swal({
-        title: 'Are you sure?',
-        text: '',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: 'red',
-        cancelButtonColor: '#eaeaea',
-        confirmButtonText: 'Are you sure?'
-      }).then(() => {
-        this.$swal({
-          title: 'Bye bye :(',
-          text: 'deleted',
-          imageUrl: 'https://media.giphy.com/media/12Y2QggFypRf7G/giphy.gif',
-          imageWidth: 400,
-          imageHeight: 200,
-          imageAlt: 'Custom image',
-          animation: false
-        })
-
-        this.$axios.delete(`/questions/delete/${questionId}`, {
-          headers: {
-            'token': tkn
-          }
-        }).then((serverResponse) => {
-          this.$store.dispatch('allQuestions')
-        }).catch((reason) => {
-          this.$swal(
-            'Oops...',
-            `Something's wrong`,
-            'error'
-          )
-        })
-      })
-    },
-    setModel (questionId) {
-      this.Questions.forEach((dataQuestion) => {
-        if (dataQuestion._id === questionId) {
-          this.questionEditForm.title = dataQuestion.title
-          this.questionEditForm.question = dataQuestion.question
-        }
-      })
-    },
-    editQuestion (questionId) {
-      let tkn = localStorage.getItem('token')
-
-      this.$axios.put(`/questions/update/${questionId}`, this.questionEditForm, {
-        headers: {
-          'token': tkn
-        }
-      }).then((serverResponse) => {
-        this.$store.dispatch('allQuestions')
-        this.$swal(
-          'Edit Success',
-          `Nice edit`,
-          'success'
-        )
-      }).catch((reason) => {
-        this.$swal(
-          'Oops...',
-          `Didnt match the requirement`,
-          'error'
-        )
-      })
     }
   },
   watch: {
