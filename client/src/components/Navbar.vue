@@ -19,13 +19,15 @@
             <router-link to="/questions">Questions</router-link>
           </li>
           <li>
-            <router-link to="/post-question">Post a Question</router-link>
+            <router-link v-if="getLoggedIn" to="/post-question">Post a Question</router-link>
           </li>
         </ul>
         <div class="navbar-form navbar-right">
-          <router-link to="/register" class="btn btn-primary">Register</router-link>
-          <router-link to="/login" class="btn btn-primary">Login</router-link>
-          <a href="#" @click="logout" class="btn btn-danger">Logout</a>
+          <template v-if="!getLoggedIn">
+            <router-link to="/login" class="btn btn-primary">Login</router-link>
+            <router-link to="/register" class="btn btn-default">Register</router-link>
+          </template>
+          <a href="#" v-else @click="logout" class="btn btn-danger">Logout</a>
         </div>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -39,6 +41,12 @@
         localStorage.removeItem('access_token')
         this.$store.commit('updateLoggedInState')
         this.$swal('Logged Out!', 'See you later', 'success')
+        this.$router.push('/')
+      }
+    },
+    computed: {
+      getLoggedIn () {
+        return this.$store.state.loggedIn
       }
     }
   }

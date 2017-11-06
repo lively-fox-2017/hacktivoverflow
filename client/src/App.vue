@@ -11,6 +11,9 @@ export default {
   name: 'app',
   components: {
     Navbar
+  },
+  created () {
+    this.$store.commit('updateLoggedInState')
   }
 }
 </script>

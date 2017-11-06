@@ -11,18 +11,20 @@
         </h1>
         <p>{{ question.content }}</p>
         <p class="text-muted">By: {{ question.author.name }}</p>
-        <a href="#" class="btn btn-primary">
-          <span class="glyphicon glyphicon-thumbs-up"></span>
-        </a>
-        <a href="#" class="btn btn-danger">
-          <span class="glyphicon glyphicon-thumbs-down"></span>
-        </a>
+        <template v-if="isLoggedIn">
+          <a href="#" class="btn btn-primary">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+          </a>
+          <a href="#" class="btn btn-danger">
+            <span class="glyphicon glyphicon-thumbs-down"></span>
+          </a>
+        </template>
         <hr>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-4" v-if="isLoggedIn">
         <form v-on:submit.prevent="postAnswer">
           <div class="form-group">
             <label for="your-answer">Your Answer</label>
@@ -94,6 +96,11 @@
     watch: {
       slug (newSlug) {
         this.fetchQuestionAnswers(newSlug)
+      }
+    },
+    computed: {
+      isLoggedIn () {
+        return this.$store.state.loggedIn
       }
     }
   }

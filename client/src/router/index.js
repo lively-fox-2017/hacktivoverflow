@@ -20,11 +20,23 @@ export default new Router({
     {
       path: '/register',
       name: 'Register',
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('access_token'))
+          next('/')
+        else
+          next()
+      },
       component: Register
     },
     {
       path: '/login',
       name: 'Login',
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('access_token'))
+          next('/')
+        else
+          next()
+      },
       component: Login
     },
     {
@@ -33,6 +45,12 @@ export default new Router({
     },
     {
       path: '/post-question',
+      beforeEnter: (to, from, next) => {
+        if (localStorage.getItem('access_token'))
+          next()
+        else
+          next('/')
+      },
       component: PostQuestion
     },
     {

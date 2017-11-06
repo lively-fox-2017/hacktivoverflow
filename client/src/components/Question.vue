@@ -10,13 +10,15 @@
           </span>
         </h1>
         <p class="text-muted">By: {{ question.author.name }}</p>
-        <a href="#" class="btn btn-primary">
-          <span class="glyphicon glyphicon-thumbs-up"></span>
-        </a>
-        <a href="#" class="btn btn-danger">
-          <span class="glyphicon glyphicon-thumbs-down"></span>
-        </a>
-        <router-link class="btn btn-success" :to="{ name: 'QuestionContent', params: { slug: question.slug } }">
+        <template v-if="isLoggedIn">
+          <a href="#" class="btn btn-primary">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+          </a>
+          <a href="#" class="btn btn-danger">
+            <span class="glyphicon glyphicon-thumbs-down"></span>
+          </a>
+        </template>
+        <router-link class="btn btn-default" :to="{ name: 'QuestionContent', params: { slug: question.slug } }">
           See answers
         </router-link>
         <hr>
@@ -27,7 +29,12 @@
 
 <script>
   export default {
-    props: ['questions']
+    props: ['questions'],
+    computed: {
+      isLoggedIn () {
+        return this.$store.state.loggedIn
+      }
+    }
   }
 </script>
 
