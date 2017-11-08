@@ -82,7 +82,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'token'
+      'token',
+      'profile'
     ])
   },
   methods: {
@@ -97,7 +98,11 @@ export default {
       })
     },
     perubahan () {
-      this.formulir = !this.formulir
+      if (this.profile) {
+        this.formulir = !this.formulir
+      } else {
+
+      }
     },
     ...mapActions([
       'checkToken'

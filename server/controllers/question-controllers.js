@@ -22,7 +22,7 @@ const addQuestion = (req,res) => {
 }
 //-----------------------------------------get question(v)
 const getQuestion = (req,res) => {
-  question.find().populate('idgrup','nama').populate('iduser','username').then((data)=>{
+  question.find().populate('idgrup','nama').populate('iduser','username').populate('vote','username').then((data)=>{
     res.send(data)
   }).catch((err)=>{
     res.send(err)
@@ -35,7 +35,7 @@ const getPersonalQuestion = (req,res) => {
     return decoded._id
     console.log(decoded._id);
   })
-  question.find({iduser:filter}).populate('idgrup','nama').populate('iduser','username').then((data)=>{
+  question.find({iduser:filter}).populate('idgrup','nama').populate('iduser','username').populate('vote','username').then((data)=>{
     res.send(data)
     console.log(filter);
   }).catch((err)=>{
@@ -47,7 +47,7 @@ const findQuestion = (req,res) => {
   console.log(req)
   question.findById({
     _id:req.params.id
-  }).populate('idgrup','nama').populate('iduser','username').then((data)=>{
+  }).populate('idgrup','nama').populate('iduser','username').populate('vote','username').then((data)=>{
     res.send(data)
   }).catch((err)=>{
     res.send(err)
@@ -55,14 +55,17 @@ const findQuestion = (req,res) => {
 }
 //-------------------------------------- edit question(v)
 const editQuestion = (req,res) => {
-  let idusertoken = jwt.verify(req.headers.token,process.env.DB_HOST,(err,decoded)=>{ return decoded._id})
+  // let idusertoken = jwt.verify(req.headers.token,process.env.DB_HOST,(err,decoded)=>{ return decoded._id})
+  console.log(req.body);
   question.update({
     _id:req.params.id
   },{
     judul:req.body.judul,
     pertanyaan:req.body.pertanyaan,
     idgrup:req.body.idgrup,
-    iduser:idusertoken
+    // iduser:idusertoken,
+    iduser:req.body.iduser,
+    vote:req.body.vote
   }).then((data)=>{
     res.send(data)
   }).catch((err)=>{

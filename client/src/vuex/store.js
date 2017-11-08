@@ -20,7 +20,10 @@ const state = {
   answerbyquestion: [],
   addjawaban: '',
   deletejawaban: '',
-  votejawabankita: ''
+  votejawabankita: '',
+  votepertanyaan: '',
+  editper: '',
+  editjaw: ''
 }
 
 const mutations = {
@@ -65,6 +68,15 @@ const mutations = {
   },
   voteJawaban (state, payload) {
     state.votejawabankita = payload
+  },
+  votePertanyaan (state, payload) {
+    state.votepertanyaan = payload
+  },
+  editQuestionOne (state, payload) {
+    state.editper = payload
+  },
+  editMenjawabOne (state, payload) {
+    state.editjaw = payload
   }
 }
 
@@ -254,6 +266,10 @@ const actions = {
       iduser: obj.iduser,
       jawaban: obj.jawaban,
       vote: obj.vote
+      // idquestion: 'coba',
+      // iduser: 'coba',
+      // jawaban: 'coba',
+      // vote: obj.vote
     })
     .then(({data}) => {
       console.log('data keluaran edit', data)
@@ -282,8 +298,83 @@ const actions = {
     // console.log(obj)
     // console.log(masukan.index)
   },
+  voteQuestion ({commit}, masukan) {
+    // console.log(masukan)
+    let obj = {
+      iduser: masukan.iduser[0]._id,
+      judul: masukan.judul,
+      pertanyaan: masukan.pertanyaan,
+      vote: []
+    }
+    masukan.vote.forEach((data) => {
+      obj.vote.push(data._id)
+    })
+    obj.vote.push(state.profile._id)
+    console.log('ini objek jadinya', obj)
+    http.put('/question/' + masukan._id, {
+      iduser: obj.iduser,
+      judul: obj.judul,
+      pertanyaan: obj.pertanyaan,
+      vote: obj.vote
+    })
+    .then(({data}) => {
+      commit('votePertanyaan', data)
+    })
+  },
+  unVoteQuestion ({commit}, masukan) {
+    let obj = {
+      iduser: masukan.iduser[0]._id,
+      judul: masukan.judul,
+      pertanyaan: masukan.pertanyaan,
+      vote: masukan.vote
+    }
+    masukan.vote.splice(masukan.index, 1)
+    // console.log('ini objek jadinya', obj)
+    http.put('/question/' + masukan._id, {
+      iduser: obj.iduser,
+      pertanyaan: obj.pertanyaan,
+      judul: obj.judul,
+      vote: obj.vote
+    })
+    .then(({data}) => {
+      // console.log('data keluaran edit', data)
+      commit('votePertanyaan', data)
+    })
+  },
   editQuestion ({commit}, masukan) {
-    console.log('daristate', masukan)
+    http.put('/question/' + masukan.id, {
+      iduser: masukan.iduser,
+      pertanyaan: masukan.pertanyaan,
+      judul: masukan.judul,
+      vote: masukan.vote
+    })
+    .then(({data}) => {
+      commit('editQuestionOne', data)
+      console.log('berhasil', data)
+    })
+  },
+  editMenjawab ({commit}, masukan) {
+    console.log('dari stre', masukan)
+    http.put('/answer/' + masukan.id, {
+      idquestion: masukan.idquestion,
+      jawaban: masukan.jawaban,
+      iduser: masukan.iduser,
+      vote: masukan.vote
+    })
+    .then(({data}) => {
+      commit('editMenjawabOne', data)
+      // console.log('berhasil', data)
+    })
+  },
+  pendaftaranUser ({commit}, masukan) {
+    http.post('/user', {
+      username: masukan.username,
+      password: masukan.password,
+      email: masukan.email
+    })
+    .then(({data}) => {
+      console.log(data)
+    })
   }
 }
 

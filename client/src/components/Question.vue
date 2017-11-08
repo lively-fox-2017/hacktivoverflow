@@ -1,9 +1,7 @@
 <template>
   <div class="Question">
 
-    <div class="" v-if="form==false">
-
-      <div class="panel panel-default">
+    <div class="panel panel-default">
         <div class="panel-heading"><b>{{questionsatuan.judul}}</b></div>
         <div class="panel-body">
           <blockquote class="blockquote-reverse">
@@ -16,11 +14,29 @@
         </div>
       </div>
 
-      <div class="formulir">
-        <form @submit.prevent="inputJawaban()" class="">
-          <textarea v-model="jawaban" class="form-control" rows="5" id="comment" placeholder="Jawab Pertanyaan"></textarea>
-          <button type="submit" class="">Submit</button>
+      <div class="formulir" v-if="form == false">
+        <div class="formulir" v-if="!token">
+
+        </div>
+        <div class="formulir" v-else>
+          <h5><b>Input Tanggapan Anda</b></h5>
+          <form @submit.prevent="inputJawaban()" class="">
+            <textarea v-model="jawaban" class="form-control" rows="5" id="comment" placeholder="Jawab Pertanyaan"></textarea>
+            <button type="submit" class="">Submit</button>
+          </form>
+        </div>
+      </div>
+      <div class="formulir" v-else>
+
+        <form @submit.prevent="editJawaban()" class="">
+            <h5><b>Edit Question Anda</b></h5>
+            <textarea v-model="jawaban" class="form-control" rows="5" id="comment" placeholder="Tulis pertanyaan anda disini"></textarea>
+
+            <button type="submit" class="">Submit</button>
+
+            <button @click="cencel()" type="button" class="">cencel</button>
         </form>
+
       </div>
 
       <div class="panel panel-default" v-for="dataanswer in answerbyquestion">
@@ -33,30 +49,31 @@
         <div class="panel-footer clearfix">
           <div class="col-xs-8">
             <div class="col-xs-4">
-              <button @click="voteanswer(dataanswer)" type="button" name="button">{{dataanswer.vote.length}}</button>
-            </div>
-            <div class="col-xs-8" v-for="data in dataanswer.vote">
-              <div class="" v-if="data.username === profile.username">
-                <p>Kamu sudah Vote</p>
+              <div class="" v-if="dataanswer.vote.findIndex((test) => {return test._id === profile._id}) === -1">
+                <button @click="voteanswer(dataanswer)" type="button" class="tumbone btn btn-default btn-sm"><span class="glyphicon glyphicon-thumbs-up"></span> {{dataanswer.vote.length}} Vote </button>
               </div>
+              <div class="" v-else>
+                <button @click="voteanswer(dataanswer)" type="button" class="tumb btn btn-default btn-sm"><span class="glyphicon glyphicon-thumbs-up"></span> {{dataanswer.vote.length}} Vote </button>
+              </div>
+              <!-- <button @click="voteanswer(dataanswer)" type="button" name="button">{{dataanswer.vote.length}}</button> -->
             </div>
+            <!-- <div class="col-xs-8" v-for="data in dataanswer.vote">
+              <div class="" v-if="dataanswer.vote.findIndex((test) => {return test._id === profile._id}) === -1">
+                <p>Belum</p>
+              </div>
+              <div class="" v-else>
+                <p>Udh ada</p>
+              </div>
+            </div> -->
           </div>
         <div class="col-xs-2" v-if="profile.username == dataanswer.iduser[0].username">
           <button class="btn btn-default btn-xs btn-lg" @click="hapusanswer(dataanswer._id)" type="button" name="button">Delete</button>
         </div>
         <div class="col-xs-2" v-if="profile.username == dataanswer.iduser[0].username">
-          <button class="btn btn-default btn-xs btn-lg" @click="Editanswer(dataanswer._id)" type="button" name="button">Edit</button>
+          <button class="btn btn-default btn-xs btn-lg" @click="Editanswer(dataanswer)" type="button" name="button">Edit</button>
         </div>
       </div>
     </div>
-    <button type="button" name="button" @click="hide()">Umpetin</button>
-    </div>
-
-    <div class="" v-else>
-      <button type="button" name="button" @click="hide()">Tmpilkan</button>
-    </div>
-
-
 
   </div>
 </template>
@@ -68,6 +85,10 @@ export default {
   data () {
     return {
       id: this.$route.params.id,
+      _id: '',
+      idquestion: '',
+      iduser: '',
+      vote: [],
       jawaban: '',
       form: false
     }
@@ -80,21 +101,72 @@ export default {
       'profile',
       'deletepertanyaan',
       'deletejawaban',
-      'votejawabankita'
+      'votejawabankita',
+      'token',
+      'editjaw'
     ])
   },
   methods: {
-    voteanswer (data) {
-      let penyaringan = data.vote.findIndex((test) => {
-        return test._id === this.profile._id
-      })
-      if (penyaringan === -1) {
-        console.log('belum ada cuy')
-        this.$store.dispatch('voteAnswer', data)
+    editJawaban () {
+      let obj = {
+        id: this._id,
+        idquestion: this.idquestion,
+        iduser: this.iduser,
+        jawaban: this.jawaban,
+        vote: this.vote
+      }
+      this.$store.dispatch('editMenjawab', obj)
+      this._id = ''
+      this.idquestion = ''
+      this.iduser = ''
+      this.jawaban = ''
+      this.form = !this.form
+    },
+    Editanswer (data) {
+      this.vote = []
+      if (this.form === false) {
+        this._id = data._id
+        this.idquestion = data.idquestion[0]._id
+        this.iduser = data.iduser[0]._id
+        this.jawaban = data.jawaban
+        data.vote.forEach((data) => {
+          this.vote.push(data._id)
+        })
+        this.form = !this.form
       } else {
-        console.log('yah udah ada', penyaringan)
-        data.index = penyaringan
-        this.$store.dispatch('unVoteAnswer', data)
+        this._id = ''
+        this.idquestion = ''
+        this.iduser = ''
+        this.jawaban = ''
+        this.form = !this.form
+      }
+
+      console.log('edited', {
+        id: data._id,
+        idquestion: data.idquestion[0]._id,
+        iduser: data.iduser[0]._id,
+        jawaban: data.jawaban,
+        vote: this.vote
+      })
+    },
+    cencel () {
+      this.form = !this.form
+    },
+    voteanswer (data) {
+      if (this.profile) {
+        let penyaringan = data.vote.findIndex((test) => {
+          return test._id === this.profile._id
+        })
+        if (penyaringan === -1) {
+          console.log('belum ada cuy')
+          this.$store.dispatch('voteAnswer', data)
+        } else {
+          console.log('yah udah ada', penyaringan)
+          data.index = penyaringan
+          this.$store.dispatch('unVoteAnswer', data)
+        }
+      } else {
+        console.log('belum login')
       }
     },
     inputJawaban () {
@@ -115,17 +187,6 @@ export default {
       this.$store.dispatch('hapusAnswer', {
         id: id
       }).then(() => {
-      })
-    },
-    Editanswer (id) {
-      this.form = !this.form
-      console.log('ceritanya mau edit', {
-        id: id,
-        idQuestion: this.id
-      })
-      this.editQuestion({
-        id: id,
-        idQuestion: this.id
       })
     },
     hide () {
@@ -156,6 +217,10 @@ export default {
     votejawabankita: function (vote) {
       console.log('jalandog')
       this.question(this.id)
+    },
+    editjaw: function (jawab) {
+      console.log('jawaban edit')
+      this.question(this.id)
     }
   }
 }
@@ -178,5 +243,22 @@ export default {
 }
 .col-xs-2 {
   text-align: right;
+}
+.tumb {
+  background: #0000FF;
+  color: #ffffff;
+}
+.tumbone {
+  background: #ffffff;
+  color: #000000;
+}
+.form-control {
+  margin-bottom: 10px;
+}
+.pembatascol {
+  padding-bottom: 15px;
+}
+.formulir {
+  color: #000000;
 }
 </style>
