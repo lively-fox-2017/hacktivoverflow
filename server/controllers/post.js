@@ -39,13 +39,9 @@ class post{
     }
 
     static put(req,res) {
-        console.log(req.params.id)
-        console.log(req.body)
         Post.findOneAndUpdate({_id: req.params.id}, {
             title: req.body.title,
             content: req.body.content,
-            author: req.body.author,
-            photo: req.body.photo
         })
         .then((result, err) => {
             if(err) return res.send(err)
@@ -116,12 +112,10 @@ class post{
     }
 
     static voteAnswer(req,res) {
-        Answer.findOne({_id: req.params.id})
+        Answer.findOneAndUpdate({_id: req.params.id}, { $inc: {votes: req.params.vote}})
         .then((result,err) => {
             if(err) return res.send(err)
-            console.log(req.params.vote)
-            result.votes = 1
-            console.log(result)
+
             res.send(result)
         })
     }

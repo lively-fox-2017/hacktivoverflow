@@ -12,6 +12,8 @@ router.get('/:id/detail', postCtrl.detail);
 
 router.post('/', postCtrl.post)
 
+router.put('/:id', postCtrl.put)
+
 router.delete('/:id', postCtrl.del)
 
 router.get('/answer/:id', postCtrl.getAnswer)

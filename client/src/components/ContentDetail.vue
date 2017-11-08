@@ -37,17 +37,38 @@
     <legend>Submit an answer</legend>
     <div class="form-group">
       <label>Answer</label>
-      <input type="text" class="form-control" placeholder="Title" ref="answer">
-      <small class="form-text text-muted">Make it as descriptive as possible.</small>
+      <input type="text" class="form-control" placeholder="Answer" ref="answer">
+      <small class="form-text text-muted">Make your answers short and simple.</small>
     </div>
     <button type="submit" class="btn btn-primary" @click.prevent="postAnswer()">Submit</button>
   </fieldset>
 </form>
+<br>
+<button @click.prevent="editQuestion()" type="button" class="btn btn-outline-info">Edit</button>
+<button @click.prevent="delQuestion()" type="button" class="btn btn-outline-danger">Delete</button>
+<br>
+<br>
+<div id='editForm' style='display: none'>
+<form>
+  <fieldset>
+    <legend>Edit Question</legend>
+    <div class="form-group">
+      <label>Question Title</label>
+      <input type="text" class="form-control" placeholder="Title" ref="title">
+      <small class="form-text text-muted">Make it as descriptive as possible.</small>
+    </div>
+    <div class="form-group">
+      <label>Question Details</label>
+      <textarea class="form-control" rows="3" ref="content"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" @click.prevent="postEdit()">Submit</button>
+  </fieldset>
+</form>
+</div>
 </div>
 </template>
 
 <script>
-import Answer from '@/components/Answer'
 import router from '../router/index'
 export default {
   props: ['id'],
@@ -118,15 +139,47 @@ export default {
       console.log(index)
       this.answers[index].votes += 1
       this.$http.post('/answer/' + params._id + '/' + 1)
+    },
+    editQuestion () {
+      document.getElementById('editForm').style.display = 'block'
+    },
+    postEdit () {
+      this.checkLogin()
+      var title = this.content.title
+      var content = this.content.content
+      if (this.$refs.title.value !== '') {
+        title = this.$refs.title.value
+      }
+      if (this.$refs.content.value !== '') {
+        content = this.$refs.content.value
+      }
+      this.$http.put('/' + this.id, {
+        title: title,
+        content: content
+      })
+      .then(({data}) => {
+        console.log(data)
+        router.go('/')
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    delQuestion () {
+      this.$http.delete('/' + this.id)
+      .then(({data}) => {
+        console.log(data)
+        router.replace('/')
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
   },
   mounted () {
     console.log(this.id)
     this.getContent()
     this.getAnswer()
-  },
-  components: {
-    Answer
   }
 }
 </script>
