@@ -46,7 +46,7 @@ class Answer {
     })
   }
   static findByQuestionId(req,res,next){
-    console.log('by questionId',req.params.id);
+    // console.log('by questionId',req.params.id);
     answer.find({
       questionId:req.params.id
     })

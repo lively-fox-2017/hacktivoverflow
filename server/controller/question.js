@@ -3,7 +3,7 @@ const token = require('../helper/jwt');
 
 class Question {
   static findAll(req,res,next){
-    console.log('here');
+    // console.log('here');
     question.find({
     })
     .populate('userId')
@@ -37,7 +37,7 @@ class Question {
     })
   }
   static findById(req,res,next){
-    console.log('asdfasd ds=======f',req.params);
+    // console.log('asdfasd ds=======f',req.params);
     question.findById(req.params.id)
     .populate('userId')
     .populate('answerId')
