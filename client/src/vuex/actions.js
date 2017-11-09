@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const http = axios.create({
   // baseURL: 'https://hacktivoverflow-api.lokilokostudio.tk/api'
-  baseURL: 'http://localhost:3000/api'
+  baseURL: 'http://hacktivoverflow-api.ianwinanto.cf/api'
 })
 
 const actions = {

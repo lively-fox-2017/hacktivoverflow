@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 Vue.prototype.$swal = swal
 Vue.prototype.$http = axios.create({
   // baseURL: 'https://hacktivoverflow-api.lokilokostudio.tk/api',
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'http://hacktivoverflow-api.ianwinanto.cf/api',
   headers: {
     'token': localStorage.getItem('token')
   }
