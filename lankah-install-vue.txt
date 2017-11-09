@@ -1,0 +1,4 @@
+cari vue-cli
+vue init webpack nama projecy
+masuk folder client
+npm install
