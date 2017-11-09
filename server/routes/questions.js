@@ -4,7 +4,8 @@ var QuestionController = require('../controllers/questions')
 
 router.post('/', QuestionController.addNew )
 router.get('/', QuestionController.getAll )
-router.get('/detail/:id', QuestionController.getID )
+router.get('/:questionid', QuestionController.getDetail )
+// router.get('/detail/:id', QuestionController.getID )
 // router.put('/:id', QuestionController.editData )
 router.put('/answer/:id', QuestionController.addAnswer )
 router.put('/voteup/:id', QuestionController.addVote )
@@ -15,3 +16,4 @@ router.put('/votedownanswer/:id', QuestionController.downVoteAnswer )
 router.delete('/:id', QuestionController.deleteData )
 
 module.exports = router;
+ 
