@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="container">
     <div class="row">
-      <form class="form-horizontal" @submit.prevent="addNewQuestion()">
+      <form class="form-horizontal" @submit.prevent="addNewQuestion">
         <fieldset>
           <!-- <legend>Ask Question</legend> -->
           <div class="form-group">
@@ -56,6 +56,8 @@ export default {
     ]),
     addNewQuestion () {
       this.submitQuestion(this.formAsk)
+      // this.formAsk.title = ''
+      // this.formAsk.content = ''
     }
   },
   computed: {

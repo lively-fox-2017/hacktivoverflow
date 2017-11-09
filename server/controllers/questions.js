@@ -18,7 +18,7 @@ class QuestionController{
   }
 
   static getDetail(req,res){
-    Question.find({_id: req.params.questionid})
+    Question.findOne({_id: req.params.questionid})
     .populate('askBy').populate({path: 'answers' , populate: { path :'answerBy' }})
     .then(result=>{
       res.status(200).json(result)
@@ -92,9 +92,10 @@ class QuestionController{
     Question.findByIdAndUpdate(req.params.id,
       {$pull:{'voters': {'voter':decoded.userid} }},{safe: true, multi: true}
     ).then(result=>{
-      res.status(200).json(vote)
+      res.status(200).json({voter:decoded.userid})
     }).catch(err=>{
-      res.status(500).json(err)
+      console.log(err)
+      res.status(400).json(err)
     })
   }
 
@@ -118,7 +119,7 @@ class QuestionController{
     Answer.findByIdAndUpdate(req.params.id,
       {$pull:{'voters': {'voter':decoded.userid} }},{safe: true, multi: true}
     ).then(result=>{
-      res.status(200).json(vote)
+      res.status(200).json({'voter':decoded.userid})
     }).catch(err=>{
       res.status(500).json(err)
     })
@@ -152,9 +153,9 @@ class QuestionController{
 
   static deleteData(req,res){
     let condition={
-      userid : req.params.id
+      _id : req.params.id
     }
-    User.findOneAndRemove(condition).then(result=>{
+    Question.findOneAndRemove(condition).then(result=>{
       res.status(200).json(result)
     }).catch(err=>{
       res.status(500).json(err)

@@ -1,21 +1,24 @@
 <template lang="html">
   <div class="panel">
     <div class="panel-body">
-      <div class="col-md-1">
+      <!-- <div class="col-md-1">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqzzdjI4PIbvPOvwYOlWunYnmjvHJgrDfS1jo56KuQyyUyImbXzg" alt="">
-      </div>
-      <div class="col-md-11">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </div> -->
+      <div class="col-md-12">
+        <p>{{answer.answer}}</p>
       </div>
       <ul class="nav nav-pills">
-        <li class="active"><router-link :to="{ name: '', params: {} }">Likes<span class="badge">42</span></router-link></li>
+        <button type="button"  @click="voteupanswer(answer._id)" class="btn btn-primary btn-sm"   v-if="answer.voters.filter(a => a.voter==id).length==0">Vote</button>
+        <button type="button"  @click="votedownanswer(answer._id)" class="btn btn-primary btn-sm" v-if="answer.voters.filter(a => a.voter==id).length>0">UnVote</button>
+        <button type="button" @click="deleteanswer(answer._id)" class="btn btn-danger btn-sm" v-if="answer.answerBy==id">Delete</button>
       </ul>
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
 export default {
+  props: ['answer']
 }
 </script>
 

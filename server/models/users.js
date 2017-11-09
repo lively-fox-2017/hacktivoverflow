@@ -4,11 +4,11 @@ mongoose.connection.openUri('mongodb://localhost/hacktivoverflow');
 mongoose.Promise = global.Promise;
 
 const userSchema = new Schema({
-  userid:String,
-  name :String,
-  email:String,
-  imgUrl:String
-
+  userid:{type: String, index: true, unique: true, required: true },
+  // name :String,
+  password:{type: String, unique: true, required: true },
+  salt: String,
+  // imgUrl:String
 });
 
 

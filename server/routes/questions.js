@@ -16,3 +16,4 @@ router.put('/votedownanswer/:id', QuestionController.downVoteAnswer )
 router.delete('/:id', QuestionController.deleteData )
 
 module.exports = router;
+ 

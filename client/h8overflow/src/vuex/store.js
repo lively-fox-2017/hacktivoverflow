@@ -5,22 +5,22 @@ import axios from 'axios'
 const $http = axios.create({
   baseURL: 'http://localhost:3000'
 })
-//
-// Vue.prototype.$http = axios.create({
-//   baseURL: 'http://localhost:3000'
-// })
 
 Vue.use(Vuex)
 
 const state = {
   questions: [],
-  question: {},
+  questiondetail: {},
+  activeuser: '',
   id: ''
 }
 
 const mutations = {
   setQuestions (state, payload) {
     state.questions = payload
+  },
+  setQuestionDetail (state, payload) {
+    state.questiondetail = payload
   },
   saveQuestion (state, payload) {
     state.questions.push(payload)
@@ -31,7 +31,6 @@ const mutations = {
         return element._id
       }
     })
-    console.log(payload)
     state.questions[idx].voters.push(payload.data)
   },
   redVote (state, payload) {
@@ -41,12 +40,27 @@ const mutations = {
       }
     })
     const index = state.questions[idx].voters.findIndex((element) => {
-      if (element._id === '59f9d16eed550b7df8c5a813') {
+      if (element.userid === this.activeuser) {
         return element._id
       }
     })
-    console.log(payload)
     state.questions[idx].voters.splice(index, 1)
+  },
+  deleteQuestion (state, payload) {
+    const idx = state.questions.findIndex((element) => {
+      if (element._id === payload) {
+        return element._id
+      }
+    })
+    state.questions.splice(idx, 1)
+  },
+  setActiveuser (state, payload) {
+    state.activeuser = payload.userid
+    state.id = payload.id
+  },
+  delActiveuser (state) {
+    state.activeuser = ''
+    state.id = ''
   }
 }
 
@@ -60,9 +74,19 @@ const actions = {
       console.log(err)
     })
   },
+  getDetail ({ commit }, id) {
+    $http.get('/api/questions/' + id)
+    .then(({data}) => {
+      console.log(data)
+      commit('setQuestionDetail', data)
+    }).catch(err => {
+      console.log(err)
+    })
+  },
   submitQuestion ({ commit }, newquestion) {
-    $http.post('/api/questions', newquestion, {headers: {'tokenjwt': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI1OWY5ZDE2ZWVkNTUwYjdkZjhjNWE4MTMifQ.D7t_rTo9JW35C4dM5xgJdpvM-RcaR1FJxfaKcDMGHJs'}})
+    $http.post('/api/questions', newquestion, {headers: {'tokenjwt': localStorage.getItem('tokenjwt')}})
     .then(({ data }) => {
+      console.log(data)
       commit('saveQuestion', data)
     })
   },
@@ -70,19 +94,59 @@ const actions = {
     const data = {
       _id: id
     }
-    $http.put('/api/questions/voteup/' + id, data, {headers: {'tokenjwt': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI1OWY5ZDE2ZWVkNTUwYjdkZjhjNWE4MTMifQ.D7t_rTo9JW35C4dM5xgJdpvM-RcaR1FJxfaKcDMGHJs'}})
+    $http.put('/api/questions/voteup/' + id, data, {headers: {'tokenjwt': localStorage.getItem('tokenjwt')}})
     .then(({ data }) => {
       commit('addVote', {id: id, data: data})
-    }).catch(err => { console.log(err) })
+    }).catch(err => {
+      alert('Please login first')
+      console.log(err)
+    })
   },
   redVote ({ commit }, id) {
     const data = {
       _id: id
     }
-    $http.put('/api/questions/votedown/' + id, data, {headers: {'tokenjwt': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiI1OWY5ZDE2ZWVkNTUwYjdkZjhjNWE4MTMifQ.D7t_rTo9JW35C4dM5xgJdpvM-RcaR1FJxfaKcDMGHJs'}})
+    $http.put('/api/questions/votedown/' + id, data, {headers: {'tokenjwt': localStorage.getItem('tokenjwt')}})
     .then(({ data }) => {
       commit('redVote', {id: id, data: data})
     }).catch(err => { console.log(err) })
+  },
+  deleteQuestion ({commit}, id) {
+    $http.delete('api/questions/' + id, {headers: {'tokenjwt': localStorage.getItem('tokenjwt')}})
+    .then(({ data }) => {
+      commit('deleteQuestion', id)
+    }).catch(err => { console.log(err) })
+  },
+  registerUser ({commit}, newUser) {
+    $http.post('api/users', newUser)
+    .then(({data}) => {
+      alert('Register Completed')
+    }).catch(err => {
+      alert('Opps..Register Fail')
+      console.log(err)
+    })
+  },
+  loginUser ({commit}, userdata) {
+    $http.post('api/users/login', userdata)
+    .then(({data}) => {
+      localStorage.setItem('tokenjwt', data.token)
+      commit('setActiveuser', data)
+      alert('Login Completed')
+    }).catch(err => {
+      alert('Opps..Login Fail')
+      console.log(err)
+    })
+  },
+  logoutUser ({commit}) {
+    localStorage.removeItem('tokenjwt')
+    commit('delActiveuser')
+  },
+  submitAnswer ({ commit }, newanswer) {
+    $http.put('/api/questions/answer/' + newanswer.questionid, {answer: newanswer.content}, {headers: {'tokenjwt': localStorage.getItem('tokenjwt')}})
+    .then(({ data }) => {
+      console.log(data)
+      commit('saveAnswer', data)
+    })
   }
 }
 

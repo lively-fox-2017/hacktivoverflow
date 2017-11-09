@@ -4,6 +4,10 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './vuex/store'
+import jwtDecode from 'jwt-decode'
+
+Vue.prototype.$jwtd = jwtDecode
+
 // import axios from 'axios'
 
 // Vue.prototype.$http = axios.create({ baseURL: 'http://localhost:3000' })
